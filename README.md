@@ -32,4 +32,4 @@ Run command
 This will also migrate dummy data.
 
 Note: Make sure the **bcci_dtr** app is inside the htdocs or www of your apache server.
---------------------
+
