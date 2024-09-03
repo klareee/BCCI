@@ -2,7 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Enums\CivilStatusEnum;
+use App\Enums\GenderEnum;
+use App\Enums\RoleEnum;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -24,12 +29,36 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->name(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('1234'),
             'remember_token' => Str::random(10),
+            'date_of_birth' => now()->subYears(5),
+            'gender' => Arr::random([GenderEnum::MALE, GenderEnum::FEMALE]),
+            'address' => fake()->address(),
+            'marital_status' => Arr::random([CivilStatusEnum::SINGLE, CivilStatusEnum::MARRIED]),
+            'contact_number' => fake()->phoneNumber(),
         ];
+    }
+
+    public function admin() : static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => Role::where('name', RoleEnum::ADMIN)->first()?->id,
+        ]);
+    }
+    public function hr() : static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => Role::where('name', RoleEnum::HR)->first()?->id,
+        ]);
+    }
+    public function employee() : static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => Role::where('name', RoleEnum::EMPLOYEE)->first()?->id,
+        ]);
     }
 
     /**
