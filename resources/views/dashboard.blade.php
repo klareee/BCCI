@@ -3,7 +3,5 @@
         {{ __('Dashboard') }}
     </x-slot>
 
-    <div class="p-4 bg-white rounded-lg shadow-xs">
-        {{ __('You are logged in!') }}
-    </div>
+    <livewire:time-entry />
 </x-app-layout>
