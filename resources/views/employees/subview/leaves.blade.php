@@ -98,38 +98,43 @@
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase bg-gray-50 border-b">
                             <th class="px-4 py-3">Date</th>
-                            <th class="px-4 py-3">Time</th>
-                            <th class="px-4 py-3">Total Days</th>
+                            <th class="px-4 py-3">Credit Deduction</th>
+                            <th class="px-4 py-3">Approvers</th>
                             <th class="px-4 py-3">Reason</th>
-                            <th class="px-4 py-3">Approver</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Remarks</th>
+                            <th class="px-4 py-3">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y">
                         @forelse($leaves as $leave)
                             <tr class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $leave->start_date }} ~ {{ $leave->end_date }}
+                                    {{ $leave->date }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $leave->start_time }} ~ {{ $leave->end_time }}
+                                    {{ $leave->total_credit }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $leave->total_days }}
+                                    <p>{{ $leave->user->employmentDetail->supervisor->fullName() }} :
+                                        {{ Str::title($leave->is_sp_approval_status) }}</p>
+                                    <p>{{ $leave->user->employmentDetail->manager->fullName() }} :
+                                        {{ Str::title($leave->is_mgr_approval_status) }}</p>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $leave->reason }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $leave->approver->fullName() }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
                                     {{ Str::title($leave->status) }}
-                                    {{ $leave->status == App\Enums\StatusEnum::APPROVED->value ? '~ ' . $leave->approved_date : '' }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $leave->remarks }}
+                                </td>
+                                <td class="px-4 py-3 text-sm">
+                                    @if (!in_array($leave->status, [App\Enums\StatusEnum::APPROVED->value, App\Enums\StatusEnum::CANCELLED->value]))
+                                        <a href="{{ route('leaves.cancel-page', ['leave' => $leave]) }}"
+                                            class="px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:ring ml-auto">Cancel</a>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
