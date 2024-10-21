@@ -5,16 +5,15 @@ namespace App\Models;
 use App\Traits\Modifiers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LeaveType extends Model
+class Category extends Model
 {
     use HasFactory, Modifiers;
 
     protected $guarded = [];
 
-    public function employeeLeaveInformation()
+    public function positions()
     {
-        return $this->hasMany(EmployeeLeaveInformation::class, 'leave_type_id');
+        return $this->hasMany(Position::class, 'category_id');
     }
 }

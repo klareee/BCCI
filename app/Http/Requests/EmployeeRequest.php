@@ -34,7 +34,8 @@ class EmployeeRequest extends FormRequest
             // employment detail
             'position' => 'required',
             'department' => 'required',
-            'manager' => 'required',
+            'manager' => 'nullable',
+            'supervisor' => 'nullable',
             'employment_status' => 'required',
             'date_hired' => 'required',
             'date_regularized' => 'required',

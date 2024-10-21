@@ -17,13 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('leave_type_id');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->string('total_days');
-            $table->date('approved_date');
-            $table->unsignedBigInteger('approved_by');
+            $table->date('date');
+            $table->string('type');
+            $table->decimal('total_credit');
+            $table->string('is_mgr_approval_status')->default(StatusEnum::PENDING);
+            $table->string('is_sp_approval_status')->default(StatusEnum::PENDING);
             $table->text('reason');
             $table->text('remarks')->nullable();
             $table->string('status')->default(StatusEnum::PENDING);

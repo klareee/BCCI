@@ -111,8 +111,8 @@
                         <x-input-label for="email" :value="__('Email')" />
                         <span class="text-red-500">*</span>
                     </div>
-                    <x-text-input id="email"  type="email" class="mt-1 block w-full"
-                        :value="$user->email" autofocus autocomplete="email" disabled />
+                    <x-text-input id="email" type="email" class="mt-1 block w-full" :value="$user->email" autofocus
+                        autocomplete="email" disabled />
                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
                 </div>
 
@@ -141,8 +141,19 @@
                             <x-input-label for="position" :value="__('Position')" />
                             <span class="text-red-500">*</span>
                         </div>
-                        <x-text-input id="position" name="position" type="text" class="mt-1 block w-full"
-                            :value="$user->employmentDetail->position" autofocus autocomplete="name" />
+                        <select name="position" id="position"
+                            class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            @foreach ($categories as $category)
+                                <optgroup label="{{ $category->name }}">
+                                    @foreach ($category->positions as $position)
+                                        <option value="{{ $position->id }}"
+                                            @if ($position->id == old('position') || $position->id == $user->employmentDetail->position_id) selected @endif>
+                                            {{ Str::title($position->name) }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
                         <x-input-error class="mt-2" :messages="$errors->get('position')" />
                     </div>
 
@@ -160,14 +171,39 @@
                 <div class="max-w-xl mb-4">
                     <div class="flex gap-1">
                         <x-input-label for="manager" :value="__('Manager')" />
-                        <span class="text-red-500">*</span>
                     </div>
                     <select name="manager" id="manager"
                         class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-                        <option value="">Select one</option>
-                        @foreach ($managers as $manager)
-                            <option value="{{ $manager->id }}" @if ($user->employmentDetail->manager_id == $manager->id) selected @endif>
-                                {{ Str::title($manager->fullName()) }}</option>
+                        @foreach ($positions as $position)
+                            <optgroup label="{{ $position->name }}">
+                                @foreach ($position->employmentDetails as $employmentDetail)
+                                    <option value="{{ $employmentDetail->user->id }}"
+                                        @if ($employmentDetail->user->id == old('manager') || $employmentDetail->user->id == $user->employmentDetail->manager_id) selected @endif>
+                                        {{ Str::title($employmentDetail->user->fullName()) }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('manager')" />
+                </div>
+
+                <div class="max-w-xl mb-4">
+                    <div class="flex gap-1">
+                        <x-input-label for="supervisor" :value="__('Supervisor')" />
+                    </div>
+                    <select name="supervisor" id="supervisor"
+                        class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        @foreach ($positions as $position)
+                            <optgroup label="{{ $position->name }}">
+                                @foreach ($position->employmentDetails as $employmentDetail)
+                                    <option value="{{ $employmentDetail->user->id }}"
+                                        @if (
+                                            $employmentDetail->user->id == old('supervisor') ||
+                                                $employmentDetail->user->id == $user->employmentDetail->supervisor_id) selected @endif>
+                                        {{ Str::title($employmentDetail->user->fullName()) }}
+                                    </option>
+                                @endforeach
+                            </optgroup>
                         @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('manager')" />
@@ -229,7 +265,7 @@
                         <span class="text-red-500">*</span>
                     </div>
                     <x-text-input id="basic_salary" name="basic_salary" type="number" class="mt-1 block w-full"
-                        :value="old('basic_salary') ?? $user->payrollInformation->basic_salary" autofocus autocomplete="name" />
+                        :value="old('basic_salary') ?? $user->payrollInformation?->basic_salary" autofocus autocomplete="name" />
                     <x-input-error class="mt-2" :messages="$errors->get('basic_salary')" />
                 </div>
 
@@ -242,7 +278,8 @@
                         class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                         <option value="">Select one</option>
                         @foreach (App\Enums\PayModeEnum::cases() as $paymode)
-                            <option value="{{ $paymode }}" @if ($user->payrollInformation->pay_mode == $paymode->value) selected @endif>{{ Str::title($paymode->value) }}</option>
+                            <option value="{{ $paymode }}" @if ($user->payrollInformation?->pay_mode == $paymode->value) selected @endif>
+                                {{ Str::title($paymode->value) }}</option>
                         @endforeach
                     </select>
                     <x-input-error class="mt-2" :messages="$errors->get('pay_mode')" />
@@ -258,7 +295,9 @@
                             class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                             <option value="">Select one</option>
                             @foreach (App\Enums\PaymentMethodEnum::cases() as $paymentMethod)
-                                <option value="{{ $paymentMethod }}" @if($user->payrollInformation->payment_method == $paymentMethod->value) selected @endif>{{ Str::title($paymentMethod->value) }}</option>
+                                <option value="{{ $paymentMethod }}"
+                                    @if ($user->payrollInformation?->payment_method == $paymentMethod->value) selected @endif>
+                                    {{ Str::title($paymentMethod->value) }}</option>
                             @endforeach
                         </select>
                         <x-input-error class="mt-2" :messages="$errors->get('payment_method')" />
@@ -270,7 +309,7 @@
                             <span class="text-gray-500 text-sm">(If applicable)</span>
                         </div>
                         <x-text-input id="bank_account" name="bank_account" type="text" class="mt-1 block w-full"
-                            :value="old('bank_account') ?? $user->payrollInformation->bank_account" autofocus autocomplete="name" />
+                            :value="old('bank_account') ?? $user->payrollInformation?->bank_account" autofocus autocomplete="name" />
                         <x-input-error class="mt-2" :messages="$errors->get('bank_account')" />
                     </div>
                 </div>

@@ -12,15 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employment_details', function (Blueprint $table) {
+        Schema::create('employee_leave_information', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('position');
-            $table->string('department');
-            $table->unsignedBigInteger('manager_id')->nullable();
-            $table->string('employment_status');
-            $table->date('date_hired');
-            $table->date('date_regularized');
+            $table->unsignedBigInteger('leave_type_id');
+            $table->integer('balance');
             (new PrintableTable($table))->modifier($table);
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employement_details');
+        Schema::dropIfExists('employee_leave_information');
     }
 };

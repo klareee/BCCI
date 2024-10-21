@@ -54,7 +54,7 @@
             <div class="flex flex-col gap-3">
 
                 <div class="flex gap-2">
-                    <span>Position:</span><b>{{ Str::title($user->employmentDetail?->position) }}</b>
+                    <span>Position:</span><b>{{ Str::title($user->employmentDetail?->position->name) }}</b>
                 </div>
 
                 <div class="flex gap-2">
@@ -66,7 +66,11 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <span>Employment Status:</span><b>{{ Str::title($user->employmentDetail?->employment_status)}}</b>
+                    <span>Supervisor:</span><b>{{ Str::title($user->employmentDetail?->supervisor->fullName()) }}</b>
+                </div>
+
+                <div class="flex gap-2">
+                    <span>Employment Status:</span><b>{{ Str::title($user->employmentDetail?->employment_status) }}</b>
                 </div>
 
                 <div class="flex gap-2">
@@ -97,7 +101,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <span>Bank Account:</span><b>{{ Str::title($user->payrollInformation?->bank_account)}}</b>
+                    <span>Bank Account:</span><b>{{ Str::title($user->payrollInformation?->bank_account) }}</b>
                 </div>
             </div>
         </div>

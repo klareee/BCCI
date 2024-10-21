@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex w-full">
-            {{ __('Update Benefit') }}
+            {{ __('Update Category') }}
 
             <x-primary-button type="submit" id="triggerButton" class="ml-auto">Save</x-primary-button>
         </div>
     </x-slot>
 
-    <form action="{{ route('benefits.store') }}" method="POST"
+    <form action="{{ route('categories.update', ['category' => $category]) }}" method="POST"
         onsubmit="return confirm('Are you sure you want to update this record?')">
         @csrf
         @method('PUT')
@@ -16,7 +16,7 @@
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <header>
                 <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('Benefit Information') }}
+                    {{ __('Category Information') }}
                 </h2>
             </header>
 
@@ -25,7 +25,7 @@
                     <x-input-label for="name" :value="__('Name')" />
                     <span class="text-red-500">*</span>
                 </div>
-                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name') ?? $benefit->name"
+                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name') ?? $category->name"
                     autofocus autocomplete="name" />
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
             </div>
