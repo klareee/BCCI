@@ -75,7 +75,12 @@
                                     {{ $leave->remarks }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    @if (!in_array($leave->status, [App\Enums\StatusEnum::APPROVED->value, App\Enums\StatusEnum::CANCELLED->value]))
+                                    @if (
+                                        !in_array($leave->status, [
+                                            App\Enums\StatusEnum::APPROVED->value,
+                                            App\Enums\StatusEnum::CANCELLED->value,
+                                            App\Enums\StatusEnum::REJECTED->value,
+                                        ]))
                                         <a href="{{ route('leaves.cancel-page', ['leave' => $leave]) }}"
                                             class="px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:ring ml-auto">Cancel</a>
                                     @endif

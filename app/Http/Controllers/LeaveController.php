@@ -110,7 +110,51 @@ class LeaveController extends Controller
         }
 
         $leave->update($data);
+        $leave->refresh();
 
-        return redirect(route('leaves.index'));
+        if ($leave->is_mgr_approval_status == StatusEnum::REJECTED->value && $leave->is_sp_approval_status == StatusEnum::REJECTED->value) {
+            $leave->update([
+                'status' => StatusEnum::REJECTED->value
+            ]);
+        }
+
+        if (auth()->id() == $leave->created_by) {
+            return redirect(route('leaves.index'));
+        }
+
+        return redirect(route('employees.leaves', ['employee_id' => $leave->created_by]));
+    }
+
+    public function approveOperation(Leave $leave)
+    {
+        $data = [];
+
+        if (auth()->id() == $leave->user->employmentDetail->manager_id) {
+            $data['is_mgr_approval_status'] = StatusEnum::APPROVED->value;
+        }
+
+        if (auth()->id() == $leave->user->employmentDetail->supervisor_id) {
+            $data['is_sp_approval_status'] = StatusEnum::APPROVED->value;
+        }
+
+        $leave->update($data);
+        $leave->refresh();
+
+        if ($leave->is_mgr_approval_status == StatusEnum::APPROVED->value && $leave->is_sp_approval_status == StatusEnum::APPROVED->value) {
+            $leave->update([
+                'status' => StatusEnum::APPROVED->value
+            ]);
+
+            $leaveCredit = EmployeeLeaveInformation::where([
+                'user_id' => $leave->created_by,
+                'leave_type_id' => $leave->leave_type_id
+            ])->first();
+
+            $leaveCredit->update([
+                'balance' => ($leaveCredit->balance - $leave->total_credit)
+            ]);
+        }
+
+        return redirect()->back();
     }
 }

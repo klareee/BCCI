@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('leaves', LeaveController::class);
     Route::get('/leaves/{leave}/cancel', [LeaveController::class, 'cancelPage'])->name('leaves.cancel-page');
     Route::patch('/leaves/{leave}/cancel', [LeaveController::class, 'cancelOperation'])->name('leaves.cancel-operation');
+    Route::patch('/leaves/{leave}/approve', [LeaveController::class, 'approveOperation'])->name('leaves.approve-operation');
     Route::resource('leave-types', LeaveTypeController::class);
     Route::resource('benefits', BenefitController::class);
     Route::resource('overtimes', OvertimeController::class);
