@@ -1,35 +1,34 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex w-full">
-            {{ __('Update Benefit') }}
+            {{ __('Cancel Leave') }}
 
             <x-primary-button type="submit" id="triggerButton" class="ml-auto">Save</x-primary-button>
         </div>
     </x-slot>
 
-    <form action="{{ route('benefits.store') }}" method="POST"
-        onsubmit="return confirm('Are you sure you want to update this record?')">
+    <form action="{{ route('leaves.cancel-operation', ['leave' => $leave]) }}" method="POST"
+        onsubmit="return confirm('Are you sure you want to create this record?')">
         @csrf
-        @method('PUT')
+        @method('PATCH')
         <x-primary-button hidden id="targetButton" class="ml-auto">Save</x-primary-button>
 
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <header>
                 <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('Benefit Information') }}
+                    {{ __('Leave Information') }}
                 </h2>
             </header>
 
             <div class="max-w-xl mb-4">
                 <div class="flex gap-1">
-                    <x-input-label for="name" :value="__('Name')" />
+                    <x-input-label for="remarks" :value="__('Remarks')" />
                     <span class="text-red-500">*</span>
                 </div>
-                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name') ?? $benefit->name"
-                    autofocus autocomplete="name" />
-                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                <textarea name="remarks" id="remarks" cols="100" rows="10"
+                    class="mt-1 border-gray-300 rounded-md shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 focus-within:text-primary-600">{{ old('remarks') ?? $leave->remarks }}</textarea>
+                <x-input-error class="mt-2" :messages="$errors->get('remarks')" />
             </div>
-
     </form>
 
     <script>

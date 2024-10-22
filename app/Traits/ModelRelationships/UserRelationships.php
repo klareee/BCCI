@@ -3,6 +3,7 @@
 namespace App\Traits\ModelRelationships;
 
 use App\Models\Deduction;
+use App\Models\EmployeeLeaveInformation;
 use App\Models\EmploymentDetail;
 use App\Models\Leave;
 use App\Models\PayrollInformation;
@@ -33,5 +34,10 @@ trait UserRelationships
     public function leaves()
     {
         return $this->hasMany(Leave::class);
+    }
+
+    public function leaveInformation()
+    {
+        return $this->hasOne(EmployeeLeaveInformation::class, 'user_id');
     }
 }

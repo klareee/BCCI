@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\RoleEnum;
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Benefit;
+use App\Models\Category;
 use App\Models\Deduction;
+use App\Models\EmployeeLeaveInformation;
 use App\Models\EmploymentDetail;
 use App\Models\Leave;
 use App\Models\PayrollInformation;
+use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,10 +29,10 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        $managers =  User::with(['role', 'employmentDetail'])
-            ->whereHas('employmentDetail', fn($query) => $query->where('position', 'like', "%manager%"))
-            ->get();
-        return view('employees.create', compact('managers'));
+        $positions = Position::with('employmentDetails.user')->get();
+        $categories = Category::with('positions')->get();
+
+        return view('employees.create', compact('positions', 'categories'));
     }
 
     public function store(EmployeeRequest $request)
@@ -51,13 +54,14 @@ class EmployeeController extends Controller
 
         EmploymentDetail::create([
             ...$request->only([
-                'position',
                 'department',
                 'employment_status',
                 'date_hired',
                 'date_regularized',
             ]),
+            'position_id' => $request->position,
             'manager_id' => $request->manager,
+            'supervisor_id' => $request->supervisor,
             'user_id' => $user->id,
         ]);
 
@@ -77,7 +81,7 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        $user->load('role','employmentDetail', 'payrollInformation');
+        $user->load('role', 'employmentDetail', 'payrollInformation');
 
         return view('employees.show', compact('user'));
     }
@@ -85,11 +89,11 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $user->load('role','employmentDetail', 'payrollInformation');
-        $managers =  User::with(['role', 'employmentDetail'])
-            ->whereHas('employmentDetail', fn($query) => $query->where('position', 'like', "%manager%"))
-            ->get();
-        return view('employees.edit', compact('user', 'managers'));
+        $user->load('role', 'employmentDetail', 'payrollInformation');
+        $positions = Position::with('employmentDetails.user')->get();
+        $categories = Category::with('positions')->get();
+
+        return view('employees.edit', compact('user', 'positions', 'categories'));
     }
 
     public function update(EmployeeRequest $request)
@@ -108,13 +112,14 @@ class EmployeeController extends Controller
 
         $user->employmentDetail->update([
             ...$request->only([
-            'position',
-            'department',
-            'employment_status',
-            'date_hired',
-            'date_regularized',
+                'department',
+                'employment_status',
+                'date_hired',
+                'date_regularized',
             ]),
+            'position_id' => $request->position,
             'manager_id' => $request->manager,
+            'supervisor_id' => $request->supervisor,
         ]);
 
         $user->payrollInformation->update($request->only([
@@ -124,7 +129,6 @@ class EmployeeController extends Controller
         ]));
 
         return redirect(route('employees.index'));
-
     }
 
     public function destroy($id)
@@ -138,8 +142,9 @@ class EmployeeController extends Controller
         $user = User::findOrFail($id);
 
         $leaves = Leave::where('user_id', $id)->paginate(10);
+        $employeeLeaves = EmployeeLeaveInformation::where('user_id', $id)->paginate(10);
 
-        return view('employees.subview.leaves', compact('leaves', 'user'));
+        return view('employees.subview.leaves', compact('leaves', 'user', 'employeeLeaves'));
     }
 
     public function deductions($id)

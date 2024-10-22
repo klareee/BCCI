@@ -1,35 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Employees') }}
+        {{ __('Positions') }}
     </x-slot>
 
-    <div class="p-4 bg-white rounded-lg shadow-xs flex flex-col gap-3">
-
-        {{-- <div class="inline-flex overflow-hidden mb-4 w-full bg-white rounded-lg shadow-md">
-            <div class="flex justify-center items-center w-12 bg-blue-500">
-                <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z">
-                    </path>
-                </svg>
-            </div>
-
-            <div class="px-4 py-2 -mx-3">
-                <div class="mx-3">
-                    <span class="font-semibold text-blue-500">Info</span>
-                    <p class="text-sm text-gray-600">Sample table page</p>
-                </div>
-            </div>
-        </div> --}}
-
-        <div class="flex gap-2">
-
-            <a href="{{ route('employees.create') }}"
+    <div class="p-4 bg-white rounded-lg shadow-xs">
+        <div class="flex gap-2 mb-4">
+            <a href="{{ route('positions.create') }}"
                 class="px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring ml-auto">
                 Add
             </a>
         </div>
-
         <div class="overflow-hidden mb-8 w-full rounded-lg border shadow-xs">
             <div class="overflow-x-auto w-full">
                 <table class="w-full whitespace-no-wrap">
@@ -37,45 +17,24 @@
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase bg-gray-50 border-b">
                             <th class="px-4 py-3">Name</th>
-                            <th class="px-4 py-3">Email</th>
-                            <th class="px-4 py-3">Role</th>
-                            <th class="px-4 py-3">Position</th>
-                            <th class="px-4 py-3">Action</th>
+                            <th class="px-4 py-3">Category</th>
+                            <th class="px-4 py-3">Modified By</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y">
-                        @forelse($employees as $employee)
+                        @forelse($positions as $position)
                             <tr class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $employee->fullName() }}
+                                    {{ $position->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $employee->email }}
+                                    {{ $position->category->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $employee->role->prettyCapName() }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    {{ Str::upper($employee->employmentDetail?->position?->name) }}
+                                    {{ $position?->updater?->fullName() }}
                                 </td>
                                 <td class="px-4 py-3 flex gap-4">
-                                    <a href="{{ route('employees.show', ['employee' => $employee]) }}"
-                                        class="relative group text-blue-500">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-
-
-                                        <span
-                                            class="absolute left-1/2 bottom-full mb-2 hidden group-hover:flex -translate-x-1/2 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg">
-                                            View
-                                        </span>
-                                    </a>
-                                    <a href="{{ route('employees.edit', ['employee' => $employee]) }}"
+                                    <a href="{{ route('positions.edit', ['position' => $position]) }}"
                                         class="relative group text-yellow-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -90,7 +49,7 @@
                                     </a>
 
 
-                                    <form action="{{ route('employees.destroy', ['employee' => $employee]) }}"
+                                    <form action="{{ route('positions.destroy', ['position' => $position]) }}"
                                         method="post" onsubmit="return confirm('Do you want to delete this record?')">
                                         @method('DELETE')
                                         @csrf
@@ -111,10 +70,8 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="text-gray-700">
-                                <td class="px-4 py-3 text-sm text-center" colspan="4">
-                                    No data
-                                </td>
+                            <tr>
+                                <td colspan="2" class="text-center">No Record</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -122,7 +79,7 @@
             </div>
             <div
                 class="px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase bg-gray-50 border-t sm:grid-cols-9">
-                {{ $employees->links() }}
+                {{ $positions->links() }}
             </div>
         </div>
 
