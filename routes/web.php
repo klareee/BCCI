@@ -1,17 +1,6 @@
 <?php
 
-use App\Http\Controllers\BenefitController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DeductionController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\EmployeeLeaveInformationController;
-use App\Http\Controllers\LeaveController;
-use App\Http\Controllers\LeaveTypeController;
-use App\Http\Controllers\OvertimeController;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\{BenefitController, CategoryController, DashboardController, DeductionController, EmployeeController, EmployeeLeaveInformationController, EntryController, LeaveController, LeaveTypeController, OvertimeController, PositionController, ProfileController, UserController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,7 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/employees/{employee_id}/leaves/information/{leave_information_id}', [EmployeeLeaveInformationController::class, 'update'])->name('employees.leave-information-update');
     Route::delete('/employees/{employee_id}/leaves/information/{leave_information_id}', [EmployeeLeaveInformationController::class, 'destroy'])->name('employees.leave-information-delete');
 
-
     Route::post('/deductions', [DeductionController::class, 'store'])->name('deductions.store');
     Route::get('/deductions/{deduction}', [DeductionController::class, 'edit'])->name('deductions.edit');
     Route::put('/deductions/{deduction}', [DeductionController::class, 'update'])->name('deductions.update');
@@ -54,6 +42,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('/deductions', [DeductionController::class, 'store'])->name('deductions.store');
+
+    Route::group(['prefix' => 'entries'], function () {
+        # pages
+        Route::get('/', [EntryController::class, 'index'])->name('entries.index');
+        Route::get('/tardiness', [EntryController::class, 'tardiness'])->name('entries.tardiness');
+        Route::get('/undertime', [EntryController::class, 'undertime'])->name('entries.undertime');
+
+        # forms
+        Route::post('clock-in', [EntryController::class, 'clockIn'])->name('entries.clock-in');
+        Route::post('clock-out', [EntryController::class, 'clockOut'])->name('entries.clock-out');
+    });
+
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

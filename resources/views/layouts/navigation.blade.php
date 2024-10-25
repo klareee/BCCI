@@ -60,6 +60,62 @@
                 </x-nav-link>
             </li>
 
+            <li class="relative px-6 py-3">
+                <button
+                    class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 text-gray-800 hover:text-gray-500"
+                    @click="togglePagesMenu"
+                    aria-haspopup="true"
+                >
+                    <span class="inline-flex items-center">
+                        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                        </svg>
+                        <span class="ml-4 ">{{ __('Timesheet') }}</span>
+                    </span>
+                    <svg
+                        class="w-4 h-4"
+                        aria-hidden="true"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                        ></path>
+                    </svg>
+                </button>
+                <template x-if="isPagesMenuOpen">
+                    <ul
+                        x-transition:enter="transition-all ease-in-out duration-300" 
+                        x-transition:enter-start="opacity-25 max-h-0"
+                        x-transition:enter-end="opacity-100 max-h-xl"
+                        x-transition:leave="transition-all ease-in-out duration-300"
+                        x-transition:leave-start="opacity-100 max-h-xl"
+                        x-transition:leave-end="opacity-0 max-h-0"
+                        class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50"
+                        aria-label="submenu"
+                    >
+                        <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
+                            <x-nav-link href="{{ route('entries.index') }}" :active="request()->routeIs('entries.index')">
+                                Logs
+                            </x-nav-link>
+                        </li>
+                        <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
+                            <x-nav-link href="{{ route('entries.tardiness') }}" :active="request()->routeIs('entries.tardiness')">
+                                Tardiness
+                            </x-nav-link>
+                        </li>
+                        <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
+                            <x-nav-link href="{{ route('entries.undertime') }}" :active="request()->routeIs('entries.undertime')">
+                                Undertime
+                            </x-nav-link>
+                        </li>
+                    </ul>
+                </template>
+            </li>
+
             @if (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value)
                 <li class="relative px-6 py-3">
                     <x-nav-link href="{{ route('employees.index') }}" :active="request()->routeIs('employees.*')">

@@ -1,5 +1,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('data', () => ({
+        dark: false,
+
         isProfileMenuOpen: false,
         toggleProfileMenu() {
             this.isProfileMenuOpen = !this.isProfileMenuOpen
@@ -21,6 +23,14 @@ document.addEventListener('alpine:init', () => {
         isMultiLevelMenuOpen: false,
         toggleMultiLevelMenu() {
             this.isMultiLevelMenuOpen = !this.isMultiLevelMenuOpen
-        }
+        },
+
+        isPagesMenuOpen: false,
+        togglePagesMenu() {
+            this.isPagesMenuOpen = !this.isPagesMenuOpen
+        },
+
+        // Dashboard
+        confirmAction: false
     }))
 })

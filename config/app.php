@@ -120,7 +120,9 @@ return [
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+        'store'  => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'clock_in'  => env('CLOCK_IN', '7'),
+    'clock_out' => env('CLOCK_OUT', '16'),
 ];
