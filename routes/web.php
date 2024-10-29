@@ -7,13 +7,14 @@ use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 Route::get('/', function () {
     return view('time_record.index');
-});
+})->middleware('guest');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
     Route::view('about', 'about')->name('about');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
