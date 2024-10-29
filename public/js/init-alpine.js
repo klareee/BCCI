@@ -31,6 +31,32 @@ document.addEventListener('alpine:init', () => {
         },
 
         // Dashboard
-        confirmAction: false
+        confirmAction: false,
+
+        async registerAuth(userEmail) {
+            if (Webpass.isUnsupported()) {
+                alert("Your browser doesn't support WebAuthn.")
+            }
+
+            const { success } = await Webpass.attest({path: "/webauthn/register/options", body: {email: userEmail}}, "/webauthn/register")
+
+            if (success) {
+                window.alert('User fingerprint successfully registered!')
+            }
+        },
+
+        async verifyAuth() {
+            const { success }= await Webpass.assert("/webauthn/login/options", "/webauthn/login")
+
+            if(success) {
+             const recordResponse = await fetch('/entries/check-user-record')
+             const {state} = await recordResponse.json()
+
+             const clockInOutResponse = state == 'clock in' ? await fetch('/entries/clock-in/api', {method: 'POST'}) : await fetch('/entries/clock-out/api', {method: 'POST'})
+             const {entry} = await clockInOutResponse.json()
+             document.getElementById('time-in-text').textContent = `Time In: ${entry.clock_in}`;
+             document.getElementById('time-out-text').textContent = `Time Out: ${entry.clock_out}`;
+            }
+        }
     }))
 })

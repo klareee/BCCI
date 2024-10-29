@@ -1,13 +1,17 @@
 <?php
 
 use App\Http\Controllers\{BenefitController, CategoryController, DashboardController, DeductionController, EmployeeController, EmployeeLeaveInformationController, EntryController, LeaveController, LeaveTypeController, OvertimeController, PositionController, ProfileController, UserController};
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
+use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('time_record.index');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
@@ -54,8 +58,12 @@ Route::middleware('auth')->group(function () {
         # forms
         Route::post('clock-in', [EntryController::class, 'clockIn'])->name('entries.clock-in');
         Route::post('clock-out', [EntryController::class, 'clockOut'])->name('entries.clock-out');
-    });
 
+        # api
+        Route::get('check-user-record', [EntryController::class, 'checkHasRecord'])->name('entries.check-user-record');
+        Route::post('clock-in/api', [EntryController::class, 'clockInApi'])->name('entries.clock-in-api');
+        Route::post('clock-out/api', [EntryController::class, 'clockOutApi'])->name('entries.clock-out-api');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

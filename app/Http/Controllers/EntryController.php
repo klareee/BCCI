@@ -106,4 +106,35 @@ class EntryController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+    public function checkHasRecord()
+    {
+        $entry = Entry::whereDate('clock_in', Carbon::today())
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $state = (isset($entry) && empty($entry->clock_out)) ? 'clock out' : 'clock in';
+
+        return response()->json(['success' => true, 'state' => $state]);
+    }
+
+
+    public function clockInApi(Request $request, UserClocksIn $clockIn)
+    {
+        $entry = $clockIn->execute(Auth::user());
+
+        return response()->json(['success' => true, 'entry' => ['clock_in' => $entry->clock_in->format('d-M-Y h:i a'), 'clock_out' => $entry->clock_out?->format('d-M-Y h:i a')]]);
+    }
+
+    public function clockOutApi(Request $request, UserClocksOut $clockOut)
+    {
+        $entry = $clockOut->execute(Auth::user(), ['clock_out' => Carbon::now()]);
+
+        if (!$entry) {
+            return response()->json(['success' => false]);
+        }
+
+        return response()->json(['success' => true, 'entry' => ['clock_in' => $entry->clock_in->format('d-M-Y h:i a'), 'clock_out' => $entry->clock_out?->format('d-M-Y h:i a')]]);
+    }
 }
