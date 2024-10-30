@@ -123,6 +123,7 @@ return [
         'store'  => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'clock_in'  => env('CLOCK_IN', '7'),
-    'clock_out' => env('CLOCK_OUT', '16'),
+    'clock_in'  => env('CLOCK_IN', '7'),            # 24 hour format
+    'clock_out' => env('CLOCK_OUT', '16'),          # 24 hour format
+    'timezone'  => env('TIMEZONE', 'Asia/Manila'),  # PH default timezone
 ];

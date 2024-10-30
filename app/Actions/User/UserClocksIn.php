@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 
 class UserClocksIn
 {
-    public function execute(User $user): Entry|bool
+    public function execute(User $user, array $attributes = []): Entry|bool
     {
         if ($this->hasExistingEntry($user)) {
             return false;

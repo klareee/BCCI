@@ -1,14 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between">
-            {{ __('Timesheet Logs') }}
-            <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg bg-purple-600 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                </svg>
-                <span>Add Logs</span>
-            </button>
-        </div>
+        {{ __('Timesheet Logs') }}
     </x-slot>
 
     <div class="p-4 bg-white rounded-lg shadow-xs flex flex-col gap-3">
@@ -22,7 +14,6 @@
                             <th class="px-4 py-3">Tardiness (mins)</th>
                             <th class="px-4 py-3">Undertime (mins)</th>
                             <th class="px-4 py-3">Hours Worked</th>
-                            <th class="px-4 py-3">Actions</th>
                             <th class="px-4 py-3">Status</th>
                         </tr>
                     </thead>
@@ -44,13 +35,6 @@
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $entry->hours_worked }}
-                                </td>
-                                <td class="px-4 py-3 text-sm">
-                                    <button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border border-transparent rounded-lg active:bg-gray-100 hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </button>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     

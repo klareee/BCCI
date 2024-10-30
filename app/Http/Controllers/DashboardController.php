@@ -15,8 +15,9 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $state = (isset($entry) && empty($entry->clock_out)) ? 'clock out' : 'clock in';
+        $state              = (isset($entry) && empty($entry->clock_out)) ? 'clock out' : 'clock in';
+        $hasClockedOutToday = !empty($entry->clock_out);
 
-        return view('dashboard', compact('entry', 'state'));
+        return view('dashboard', compact('entry', 'state', 'hasClockedOutToday'));
     }
 }
