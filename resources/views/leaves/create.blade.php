@@ -55,7 +55,7 @@
                 <select name="type" id="type"
                     class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     <option value="">Select one</option>
-                    <option value="0.5" @if (old('type') == '0.5') selected @endif>Half Day</option>
+                    {{-- <option value="0.5" @if (old('type') == '0.5') selected @endif>Half Day</option> --}}
                     <option value="1" @if (old('type') == '1') selected @endif>Whole Day</option>
                 </select>
                 <x-input-error class="mt-2" :messages="$errors->get('type')" />

@@ -18,7 +18,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        $leaveCredits = EmployeeLeaveInformation::with('leaveType')->get();
+        $leaveCredits = EmployeeLeaveInformation::with('leaveType')->where('user_id', auth()->id())->get();
         $leaves = Leave::where('user_id', auth()->id())->with('user.employmentDetail')->paginate(10);
         return view('leaves.index', compact('leaves', 'leaveCredits'));
     }
@@ -28,7 +28,7 @@ class LeaveController extends Controller
      */
     public function create()
     {
-        $leaveCredits = EmployeeLeaveInformation::with('leaveType')->get();
+        $leaveCredits = EmployeeLeaveInformation::with('leaveType')->where('user_id', auth()->id())->get();
         return view('leaves.create', compact('leaveCredits'));
     }
 
@@ -156,10 +156,16 @@ class LeaveController extends Controller
                 'balance' => ($leaveCredit->balance - $leave->total_credit)
             ]);
 
+            $clockIn = Carbon::createFromFormat('Y-m-d', $leave->date);
+            $clockIn->hour = (int) config('app.clock_in');
+
+            $clockOut = Carbon::createFromFormat('Y-m-d', $leave->date);
+            $clockOut->hour = (int) config('app.clock_out');
+
             Entry::create([
                 'user_id'  => $leave->created_by,
-                'clock_in' => Carbon::createFromFormat('m/d/Y', $leave->date)->setTime(config('app.clock_in'), 0, 0),
-                'clock_out' => Carbon::createFromFormat('m/d/Y', $leave->date)->setTime(config('app.clock_out'), 0, 0)
+                'clock_in' => $clockIn,
+                'clock_out' => $clockOut
             ]);
         }
 
