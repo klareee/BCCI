@@ -3,7 +3,7 @@
         {{ __('Dashboard') }}
     </x-slot>
 
-    <div class="p-4 m-8 bg-white rounded-lg shadow-xs">
+    <div class="p-4 m-8 bg-white rounded-lg shadow-xs space-y-4">
         <div class="text-center">
             <div id="timeDisplay" class="text-3xl font-bold"></div>
             <div id="dateDisplay" class="text-1xl mt-2"></div>

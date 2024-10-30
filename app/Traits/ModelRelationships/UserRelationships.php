@@ -6,6 +6,7 @@ use App\Models\Deduction;
 use App\Models\EmployeeLeaveInformation;
 use App\Models\EmploymentDetail;
 use App\Models\Leave;
+use App\Models\Overtime;
 use App\Models\PayrollInformation;
 use App\Models\Role;
 
@@ -39,5 +40,10 @@ trait UserRelationships
     public function leaveInformation()
     {
         return $this->hasOne(EmployeeLeaveInformation::class, 'user_id');
+    }
+
+    public function overtimes()
+    {
+        return $this->hasMany(Overtime::class, 'user_id');
     }
 }

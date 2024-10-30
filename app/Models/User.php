@@ -6,8 +6,8 @@ namespace App\Models;
 
 use App\Traits\ModelRelationships\UserRelationships;
 use App\Traits\Modifiers;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laragear\WebAuthn\Contracts\WebAuthnAuthenticatable;
@@ -43,13 +43,14 @@ class User extends Authenticatable implements WebAuthnAuthenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
-
-    public function fullName()
+    public function fullName(): Attribute
     {
-        return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
+        return new Attribute(
+            get: fn () => $this->first_name.' '.$this->middle_name.' '.$this->last_name,
+        );
     }
 }

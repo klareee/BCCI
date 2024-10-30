@@ -26,7 +26,7 @@
                                 {{ $benefit->name }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $benefit->updater->fullName() }}
+                                {{ $benefit->updater->full_name }}
                             </td>
                             <td class="px-4 py-3 flex gap-4">
                                 <a href="{{ route('benefits.edit', ['benefit' => $benefit]) }}" class="relative group text-yellow-500">

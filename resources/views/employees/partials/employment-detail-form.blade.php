@@ -48,7 +48,7 @@
                     @foreach ($position->employmentDetails as $employmentDetail)
                         <option value="{{ $employmentDetail->user->id }}"
                             @if ($employmentDetail->user->id == old('manager')) selected @endif>
-                            {{ Str::title($employmentDetail->user->fullName()) }}</option>
+                            {{ Str::title($employmentDetail->user->full_name) }}</option>
                     @endforeach
                 </optgroup>
             @endforeach
@@ -67,7 +67,7 @@
                     @foreach ($position->employmentDetails as $employmentDetail)
                         <option value="{{ $employmentDetail->user->id }}"
                             @if ($employmentDetail->user->id == old('supervisor')) selected @endif>
-                            {{ Str::title($employmentDetail->user->fullName()) }}</option>
+                            {{ Str::title($employmentDetail->user->full_name) }}</option>
                     @endforeach
                 </optgroup>
             @endforeach

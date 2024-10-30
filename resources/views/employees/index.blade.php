@@ -47,7 +47,7 @@
                         @forelse($employees as $employee)
                             <tr class="text-gray-700">
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $employee->fullName() }}
+                                    {{ $employee->full_name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $employee->email }}
