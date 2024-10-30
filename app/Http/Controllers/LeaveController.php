@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Classes\LeaveCalculatorHelper;
 use App\Enums\StatusEnum;
 use App\Models\EmployeeLeaveInformation;
+use App\Models\Entry;
 use App\Models\Leave;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -152,6 +154,12 @@ class LeaveController extends Controller
 
             $leaveCredit->update([
                 'balance' => ($leaveCredit->balance - $leave->total_credit)
+            ]);
+
+            Entry::create([
+                'user_id'  => $leave->created_by,
+                'clock_in' => Carbon::createFromFormat('m/d/Y', $leave->date)->setTime(config('app.clock_in'), 0, 0),
+                'clock_out' => Carbon::createFromFormat('m/d/Y', $leave->date)->setTime(config('app.clock_out'), 0, 0)
             ]);
         }
 

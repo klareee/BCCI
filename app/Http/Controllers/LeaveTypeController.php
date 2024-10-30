@@ -30,10 +30,11 @@ class LeaveTypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:leave_types,name,except,deleted_at'
+            'name' => 'required|unique:leave_types,name,except,deleted_at',
+            'is_paid' => 'required'
         ]);
 
-        LeaveType::create(['name' => $request->name]);
+        LeaveType::create(['name' => $request->name, 'is_paid' => $request->is_paid == 'paid' ? 1 : 0]);
 
         return redirect(route('leave-types.index'));
     }
@@ -59,7 +60,11 @@ class LeaveTypeController extends Controller
      */
     public function update(Request $request, LeaveType $leaveType)
     {
-        $leaveType->update(['name' => $request->name]);
+        $request->validate([
+            'name' => 'required|unique:leave_types,name,except,deleted_at',
+            'is_paid' => 'required'
+        ]);
+        $leaveType->update(['name' => $request->name, 'is_paid' => $request->is_paid == 'paid' ? 1 : 0]);
 
         return redirect(route('leave_types.index'));
     }
