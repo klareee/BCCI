@@ -48,8 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'entries'], function () {
         # pages
         Route::get('/', [EntryController::class, 'index'])->name('entries.index');
-        Route::get('/tardiness', [EntryController::class, 'tardiness'])->name('entries.tardiness');
-        Route::get('/undertime', [EntryController::class, 'undertime'])->name('entries.undertime');
 
         # forms
         Route::post('clock-in', [EntryController::class, 'clockIn'])->name('entries.clock-in');

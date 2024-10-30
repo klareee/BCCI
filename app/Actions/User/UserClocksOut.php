@@ -7,17 +7,16 @@ use Illuminate\Support\Carbon;
 
 class UserClocksOut
 {
-    public function execute(User $causer, array $attributes = []): Entry
+    public function execute(User $user, array $attributes = []): Entry|bool
     {
         $entry = Entry::whereDate('clock_in', Carbon::today())
             ->whereNull('clock_out')
             ->first();
 
-        abort_unless(empty($entry->clock_out), 403);
-
         $entry->update([
             ...$attributes,
-            'updated_by' => $causer->id,
+            'clock_out'  => Carbon::now(),
+            'updated_by' => $user->id,
         ]);
 
         return $entry;

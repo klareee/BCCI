@@ -15,7 +15,9 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $entries = Entry::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
+        $entries = Entry::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('entries.index', compact('entries'));
     }
@@ -70,39 +72,16 @@ class EntryController extends Controller
         //
     }
 
-    public function tardiness()
+    public function clockIn(UserClocksIn $clockIn)
     {
-        $time    = sprintf('%02d:00:00', (int) config('app.clock_in'));
-        $entries = Entry::where('user_id', Auth::id())
-            ->whereRaw('TIME(clock_in) > ?', [$time])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('entries.tardiness', compact('entries'));
-    }
-
-    public function undertime()
-    {
-        $time    = sprintf('%02d:00:00', (int) config('app.clock_out'));
-        $entries = Entry::where('user_id', Auth::id())
-            ->whereRaw('TIME(clock_out) < ?', [$time])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('entries.undertime', compact('entries'));
-    }
-
-    public function clockIn(Request $request, UserClocksIn $clockIn)
-    {
-
-        $entry = $clockIn->execute(Auth::user());
+        $clockIn->execute(Auth::user());
 
         return redirect()->route('dashboard');
     }
 
-    public function clockOut(Request $request, UserClocksOut $clockOut)
+    public function clockOut(UserClocksOut $clockOut)
     {
-        $entry = $clockOut->execute(Auth::user(), ['clock_out' => Carbon::now()]);
+        $clockOut->execute(Auth::user());
 
         return redirect()->route('dashboard');
     }

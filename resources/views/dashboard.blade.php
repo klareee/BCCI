@@ -9,17 +9,19 @@
             <div id="dateDisplay" class="text-1xl mt-2"></div>
         </div>
 
-        <div x-show="confirmAction === false" class="flex justify-center gap-2 my-4">
-            @if($state === 'clock in')
-                <x-primary-button @click="confirmAction = true" class="bg-green-600 hover:bg-green-500">
-                    Time In
-                </x-primary-button>
-            @else
-                <x-primary-button @click="confirmAction = true" class="bg-red-800 hover:bg-red-700">
-                    Time Out
-                </x-primary-button>
-            @endif  
-        </div>
+        @if (!$hasClockedOutToday)
+            <div x-show="confirmAction === false" class="flex justify-center gap-2 my-4">
+                @if ($state === 'clock in')
+                    <x-primary-button @click="confirmAction = true" class="bg-green-600 hover:bg-green-500">
+                        Time In
+                    </x-primary-button>
+                @else
+                    <x-primary-button @click="confirmAction = true" class="bg-red-800 hover:bg-red-700">
+                        Time Out
+                    </x-primary-button>
+                @endif  
+            </div>
+        @endif
 
         <div x-show="confirmAction" class="px-6 py-4 max-w-md mx-auto text-sm">
             <form action="{{ route('entries.'. str_replace(' ', '-', $state)) }}" method="POST">
@@ -38,7 +40,7 @@
             </form>
         </div>
 
-        @if(isset($entry))
+        @if (isset($entry))
             <div class="bg-white shadow-md rounded-lg px-6 max-w-md mx-auto border border-black py-4 text-sm">
                 <h6 class="font-bold ">Time Logs</h6>
                 <p class="text-gray-600">Time In: {{ $entry->clock_in->format('d-M-Y h:i a') }}</p>
@@ -50,9 +52,10 @@
     <script>
         function updateDateTime() {
             const now = new Date();
+            const timezone = "{{ config('app.timezone') }}";
 
             // Format time as HH:MM:SS
-            const time = now.toLocaleTimeString('en-US', { hour12: false });
+            const time = now.toLocaleTimeString('en-US', { timeZone: timezone, hour12: false });
 
             // Format date
             const dateOptions = {
