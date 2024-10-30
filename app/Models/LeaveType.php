@@ -13,6 +13,11 @@ class LeaveType extends Model
 
     protected $guarded = [];
 
+    public function prettyIsPaid()
+    {
+        return $this->is_paid ? 'PAID' : 'NOT PAID';
+    }
+
     public function employeeLeaveInformation()
     {
         return $this->hasMany(EmployeeLeaveInformation::class, 'leave_type_id');
