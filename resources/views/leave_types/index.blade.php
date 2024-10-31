@@ -31,7 +31,7 @@
                                     {{ $leaveType->prettyIsPaid() }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $leaveType->updater->fullName() }}
+                                    {{ $leaveType->updater->full_name }}
                                 </td>
                                 <td class="px-4 py-3 flex gap-4">
                                     <a href="{{ route('leave-types.edit', ['leave_type' => $leaveType]) }}"

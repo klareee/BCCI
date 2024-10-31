@@ -10,7 +10,7 @@
         <x-dropdown>
             <x-slot name="trigger">
                 <button class="align-middle rounded-full focus:shadow-outline-purple focus:outline-none" @click="toggleProfileMenu" @keydown.escape="closeProfileMenu" aria-label="Account" aria-haspopup="true">
-                    {{ Auth::user()->fullName() }}
+                    {{ Auth::user()->full_name }}
                 </button>
             </x-slot>
 

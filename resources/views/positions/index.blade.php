@@ -31,7 +31,7 @@
                                     {{ $position->category->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $position?->updater?->fullName() }}
+                                    {{ $position?->updater?->full_name }}
                                 </td>
                                 <td class="px-4 py-3 flex gap-4">
                                     <a href="{{ route('positions.edit', ['position' => $position]) }}"

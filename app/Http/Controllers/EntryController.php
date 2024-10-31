@@ -16,7 +16,7 @@ class EntryController extends Controller
     public function index()
     {
         $entries = Entry::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('clock_in', 'desc')
             ->paginate(10);
 
         return view('entries.index', compact('entries'));

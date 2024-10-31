@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <span>Name:</span><b>{{ $user->fullName() }}</b>
+                    <span>Name:</span><b>{{ $user->full_name }}</b>
                 </div>
 
                 <div class="flex gap-2">
@@ -62,11 +62,11 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <span>Manager:</span><b>{{ Str::title($user->employmentDetail?->manager->fullName()) }}</b>
+                    <span>Manager:</span><b>{{ Str::title($user->employmentDetail?->manager->full_name) }}</b>
                 </div>
 
                 <div class="flex gap-2">
-                    <span>Supervisor:</span><b>{{ Str::title($user->employmentDetail?->supervisor->fullName()) }}</b>
+                    <span>Supervisor:</span><b>{{ Str::title($user->employmentDetail?->supervisor->full_name) }}</b>
                 </div>
 
                 <div class="flex gap-2">

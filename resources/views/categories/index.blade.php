@@ -27,7 +27,7 @@
                                     {{ $category->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $category?->updater?->fullName() }}
+                                    {{ $category?->updater?->full_name }}
                                 </td>
                                 <td class="px-4 py-3 flex gap-4">
                                     <a href="{{ route('categories.edit', ['category' => $category]) }}"

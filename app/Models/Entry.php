@@ -38,6 +38,7 @@ class Entry extends Model
         static::deleting(function (Entry $entry) {
             $entry->deleted_by = Auth::id();
             $entry->status     = StatusEnum::INACTIVE;
+            $entry->save();
         });
     }
 
@@ -70,7 +71,7 @@ class Entry extends Model
                 }
 
                 $undertime        = 0;
-                $expectedClockOut = $instance->clock_out->copy()->setHour((int) config('app.clock_out'))->startOfHour();
+                $expectedClockOut = $instance->clock_in->copy()->setHour((int) config('app.clock_out'))->startOfHour();
 
                 if ($instance->clock_out->lessThan($expectedClockOut)) {
                     $undertime = ceil($instance->clock_out->diffInMinutes($expectedClockOut));

@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $entry = Entry::whereDate('clock_in', Carbon::today())
             ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+            ->orderBy('clock_in', 'desc')
             ->first();
 
         $state              = (isset($entry) && empty($entry->clock_out)) ? 'clock out' : 'clock in';

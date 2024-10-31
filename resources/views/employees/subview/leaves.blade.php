@@ -116,9 +116,9 @@
                                     {{ $leave->total_credit }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    <p>{{ $leave->user->employmentDetail->supervisor->fullName() }} :
+                                    <p>{{ $leave->user->employmentDetail->supervisor->full_name }} :
                                         {{ Str::title($leave->is_sp_approval_status) }}</p>
-                                    <p>{{ $leave->user->employmentDetail->manager->fullName() }} :
+                                    <p>{{ $leave->user->employmentDetail->manager->full_name }} :
                                         {{ Str::title($leave->is_mgr_approval_status) }}</p>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
