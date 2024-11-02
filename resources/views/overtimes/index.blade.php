@@ -57,7 +57,7 @@
                                     {{ $overtime->comment }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    <span class="px-2 py-1 font-semibold leading-tight text-{{ $statusColor[$overtime->status->value] }}-700 bg-{{ $statusColor[$overtime->status->value] }}-100 rounded-full">
+                                    <span class="px-2 py-1 font-semibold leading-tight text-{{ $statusColor[$overtime->status->value] }}-600 bg-{{ $statusColor[$overtime->status->value] }}-100 rounded-full">
                                         {{ Str::title($overtime->status->value) }}
                                     </span>
                                 </td>

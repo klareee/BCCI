@@ -21,12 +21,14 @@ class Overtime extends Model
         'comment',
     ];
     protected $casts = [
-        'time_start' => 'datetime',
-        'time_end'   => 'datetime',
-        'status'     => StatusEnum::class,
-        'updated_at' => 'datetime',
-        'created_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'time_start'      => 'datetime',
+        'time_end'        => 'datetime',
+        'status'          => StatusEnum::class,
+        'is_sp_approved'  => 'boolean',
+        'is_mng_approved' => 'boolean',
+        'updated_at'      => 'datetime',
+        'created_at'      => 'datetime',
+        'deleted_at'      => 'datetime',
     ];
 
     public static function boot(): void
