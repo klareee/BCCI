@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Employee\{EmployeeCancelsOvertime, EmployeeFilesOvertime, EmployeeUpdatesOvertime};
-use App\Http\Requests\Overtime\{StoreRequest, UpdateRequest};
+use App\Actions\Employee\{EmployeeApprovesOvertime, EmployeeCancelsOvertime, EmployeeFilesOvertime, EmployeeRejectsOvertime, EmployeeUpdatesOvertime};
+use App\Http\Requests\Overtime\{ApprovedRequest, RejectedRequest, StoreRequest, UpdateRequest};
 use App\Models\{Entry, Overtime};
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +53,24 @@ class OvertimeController extends Controller
         return view('overtimes.edit', compact('overtime', 'entries'));
     }
 
+    public function approval()
+    {
+        $overtimes = Overtime::with([
+                'employee:id,first_name,last_name',
+                'employee.employmentDetail:id,user_id,manager_id,supervisor_id',
+                'employee.employmentDetail.supervisor:id,first_name,last_name',
+                'employee.employmentDetail.manager:id,first_name,last_name',
+            ])
+            ->whereHas('employee.employmentDetail', function ($query) {
+                $query->where('manager_id', Auth::id())
+                    ->orWhere('supervisor_id', Auth::id());
+            })
+            ->orderBy('time_start', 'desc')
+            ->paginate(10);
+
+        return view('overtimes.approval', compact('overtimes'));
+    }
+
     public function store(StoreRequest $request, EmployeeFilesOvertime $fileOvertime)
     {
         $fileOvertime->execute(Auth::user(), $request->validated());
@@ -70,6 +88,20 @@ class OvertimeController extends Controller
     public function destroy(Overtime $overtime, EmployeeCancelsOvertime $cancelOvertime)
     {
         $cancelOvertime->execute($overtime);
+
+        return redirect()->back();
+    }
+
+    public function approved(ApprovedRequest $request, Overtime $overtime, EmployeeApprovesOvertime $approveOvertime)
+    {
+        $approveOvertime->execute(Auth::user(), $overtime, $request->validated());
+
+        return redirect()->back();
+    }
+
+    public function rejected(RejectedRequest $request, Overtime $overtime, EmployeeRejectsOvertime $rejectOvertime)
+    {
+        $rejectOvertime->execute(Auth::user(), $overtime, $request->validated());
 
         return redirect()->back();
     }

@@ -40,7 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/leaves/{leave}/approve', [LeaveController::class, 'approveOperation'])->name('leaves.approve-operation');
     Route::resource('leave-types', LeaveTypeController::class);
     Route::resource('benefits', BenefitController::class);
-    Route::resource('overtimes', OvertimeController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('positions', PositionController::class);
 
@@ -49,6 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/deductions', [DeductionController::class, 'store'])->name('deductions.store');
+
+    Route::group(['prefix' => 'overtimes'], function () {
+        Route::get('/approval', [OvertimeController::class, 'approval'])->name('overtimes.approval');
+        Route::post('/{overtime}/approved', [OvertimeController::class, 'approved'])->name('overtimes.approved');
+        Route::post('/{overtime}/rejected', [OvertimeController::class, 'rejected'])->name('overtimes.rejected');
+    });
+    Route::resource('overtimes', OvertimeController::class);
 
     Route::group(['prefix' => 'entries'], function () {
         # pages

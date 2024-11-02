@@ -2,7 +2,7 @@
 
 namespace App\Actions\Employee;
 
-use App\Models\{Entry, Overtime, User};
+use App\Models\Overtime;
 
 class EmployeeCancelsOvertime
 {
