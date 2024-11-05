@@ -66,7 +66,7 @@ class LeaveTypeController extends Controller
         ]);
         $leaveType->update(['name' => $request->name, 'is_paid' => $request->is_paid == 'paid' ? 1 : 0]);
 
-        return redirect(route('leave_types.index'));
+        return redirect(route('leave-types.index'));
     }
 
     /**
