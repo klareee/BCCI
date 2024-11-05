@@ -29,7 +29,6 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN chmod +x start-container.sh
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
