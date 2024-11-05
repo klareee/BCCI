@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+    networks:
+      - bcci-app
+
+  db:
+    image: mysql:8.0.34
+    ports:
+      - 3306:3306
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD:-password}"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: "${DB_DATABASE:-bcci_db}"
+      MYSQL_USER: "${DB_USERNAME:-dbuser}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-password}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - bcci_mysql_db:/var/lib/mysql
+    networks:
+      - bcci-app
+
+networks:
+  bcii-app:
+    driver: bridge
+
+volumes:
+  bcci_mysql_db:
