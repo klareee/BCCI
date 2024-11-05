@@ -7,7 +7,7 @@
         </div>
     </x-slot>
 
-    <form action="{{ route('leave-types.store') }}" method="POST"
+    <form action="{{ route('leave-types.update') }}" method="POST"
         onsubmit="return confirm('Are you sure you want to update this record?')">
         @csrf
         @method('PUT')
