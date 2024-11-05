@@ -5,6 +5,7 @@ namespace App\Traits\ModelRelationships;
 use App\Models\Deduction;
 use App\Models\EmployeeLeaveInformation;
 use App\Models\EmploymentDetail;
+use App\Models\Entry;
 use App\Models\Leave;
 use App\Models\Overtime;
 use App\Models\PayrollInformation;
@@ -45,5 +46,10 @@ trait UserRelationships
     public function overtimes()
     {
         return $this->hasMany(Overtime::class, 'user_id');
+    }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class, 'user_id');
     }
 }

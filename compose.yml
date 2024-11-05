@@ -31,6 +31,21 @@ services:
     networks:
       - bcci-app
 
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8001:80
+    depends_on:
+      - db
+    command: "php artisan schedule:work"
+    networks:
+      - bcci-app
+
 networks:
   bcci-app:
     driver: bridge

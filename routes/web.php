@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{BenefitController, CategoryController, DashboardController, DeductionController, EmployeeController, EmployeeLeaveInformationController, EntryController, LeaveController, LeaveTypeController, OvertimeController, PositionController, ProfileController, UserController};
+use App\Http\Controllers\{BenefitController, CategoryController, DashboardController, DeductionController, EmployeeController, EmployeeLeaveInformationController, EntryController, LeaveController, LeaveTypeController, OvertimeController, PositionController, ProfileController, UserController, PayrollController};
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
@@ -72,3 +72,6 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+Route::resource('payrolls', PayrollController::class);

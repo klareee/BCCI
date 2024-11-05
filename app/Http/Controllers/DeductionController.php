@@ -17,7 +17,7 @@ class DeductionController extends Controller
             'benefit_id' => $request->benefit
         ]);
 
-        return redirect(route('employee.deductions', ['employee_id' => $request->user_id]));
+        return redirect(route('employees.deductions', ['employee_id' => $request->user_id]));
     }
 
     public function edit(Deduction $deduction)
