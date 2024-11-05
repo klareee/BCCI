@@ -32,7 +32,7 @@ services:
       - bcci-app
 
 networks:
-  bcii-app:
+  bcci-app:
     driver: bridge
 
 volumes:
