@@ -14,7 +14,6 @@ use App\Models\PayrollInformation;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -40,6 +39,7 @@ class EmployeeController extends Controller
         $user = User::create([
             ...$request->only([
                 'first_name',
+                'middle_name',
                 'last_name',
                 'gender',
                 'marital_status',
@@ -65,15 +65,10 @@ class EmployeeController extends Controller
             'user_id' => $user->id,
         ]);
 
-        PayrollInformation::create([
-            ...$request->only([
-                'basic_salary',
-                'pay_mode',
-                'payment_method',
-                'bank_account'
-            ]),
-            'user_id' => $user->id,
-        ]);
+        PayrollInformation::updateOrCreate(
+            ['user_id' => $user->id],
+            $request->only(['basic_salary','pay_mode','payment_method', 'bank_account']),
+        );
 
         return redirect(route('employees.index'));
     }
@@ -102,6 +97,7 @@ class EmployeeController extends Controller
 
         $user->update($request->only([
             'first_name',
+            'middle_name',
             'last_name',
             'gender',
             'marital_status',
@@ -122,11 +118,10 @@ class EmployeeController extends Controller
             'supervisor_id' => $request->supervisor,
         ]);
 
-        $user->payrollInformation->update($request->only([
-            'basic_salary',
-            'pay_mode',
-            'payment_method',
-        ]));
+        PayrollInformation::updateOrCreate(
+            ['user_id' => $user->id],
+            $request->only(['basic_salary','pay_mode','payment_method', 'bank_account']),
+        );
 
         return redirect(route('employees.index'));
     }
@@ -156,12 +151,17 @@ class EmployeeController extends Controller
         return view('employees.subview.deductions', compact('deductions', 'user'));
     }
 
-    public function deduction_create($id)
+    public function deduction_create(User $employee)
     {
-        $user = User::findOrFail($id);
-
         $benefits = Benefit::get();
 
-        return view('deductions.create', compact('benefits', 'user'));
+        return view('deductions.create', compact('benefits', 'employee'));
+    }
+
+    public function deduction_edit(User $employee, Deduction $deduction)
+    {
+        $benefits = Benefit::get();
+
+        return view('deductions.update', compact('benefits', 'employee', 'deduction'));
     }
 }

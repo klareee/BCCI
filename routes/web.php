@@ -22,7 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::get('/employees/{employee_id}/leaves', [EmployeeController::class, 'leaves'])->name('employees.leaves');
     Route::get('/employees/{employee_id}/deductions', [EmployeeController::class, 'deductions'])->name('employees.deductions');
-    Route::get('/employees/{employee_id}/deductions/create', [EmployeeController::class, 'deduction_create'])->name('employees.deduction-create');
+    Route::get('/employees/{employee}/deductions/{deduction}/edit', [EmployeeController::class, 'deduction_edit'])->name('employees.deduction-edit');
+    Route::get('/employees/{employee}/deductions/create', [EmployeeController::class, 'deduction_create'])->name('employees.deduction-create');
     Route::get('/employees/{employee_id}/leaves/information/create', [EmployeeLeaveInformationController::class, 'create'])->name('employees.leave-information-create');
     Route::post('/employees/{employee_id}/leaves/information', [EmployeeLeaveInformationController::class, 'store'])->name('employees.leave-information-store');
     Route::get('/employees/{employee_id}/leaves/information/{leave_information_id}/edit', [EmployeeLeaveInformationController::class, 'edit'])->name('employees.leave-information-edit');

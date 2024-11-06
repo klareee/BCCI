@@ -47,9 +47,9 @@ class CategoryController extends Controller
         return redirect(route('categories.index'));
     }
 
-    public function delete(Category $category)
+    public function destroy(Category $category)
     {
         $category->delete();
-        return redirect(route('categories.index'));
+        return redirect()->back();
     }
 }
