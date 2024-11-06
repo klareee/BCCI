@@ -14,8 +14,7 @@ use Illuminate\Http\Request;
 class PayrollController extends Controller
 {
     public function index() {
-        Semaphore::send('09178781045', 'Hyers');
-
-        dd('complete');
+        $payslips = Payslip::where('user_id', auth()->id())->paginate(10);
+        return view('payslip.index', compact('payslips'));
     }
 }

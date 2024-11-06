@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('benefits', BenefitController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('positions', PositionController::class);
+    Route::resource('payrolls', PayrollController::class);
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -72,6 +74,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
-
-
-Route::resource('payrolls', PayrollController::class);
