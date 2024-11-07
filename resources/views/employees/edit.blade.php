@@ -7,8 +7,8 @@
         </div>
     </x-slot>
 
-    <form action="{{ route('employees.update', ['employee' => $user]) }}" method="POST"
-        onsubmit="return confirm('Are you sure you want to create this record?')">
+    <form action="{{ route('employees.update', ['employee' => $user->id]) }}" method="POST"
+        onsubmit="return confirm('Are you sure you want to update this record?')">
         @csrf
         @method('PUT')
         <x-primary-button hidden id="targetButton" class="ml-auto">Save</x-primary-button>

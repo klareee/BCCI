@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Edit Overtime Hours') }}
+        {{ __('Update Overtime Hours') }}
     </x-slot>
 
-    <form action="{{ route('overtimes.update', compact('overtime')) }}" method="POST" onsubmit="return confirm('Are you sure you want to edit this record?')">
+    <form action="{{ route('overtimes.update', compact('overtime')) }}" method="POST" onsubmit="return confirm('Are you sure you want to update this record?')">
         @method('PATCH')
         @csrf
         <div class="max-w-xl mx-auto p-4 sm:p-8 bg-white shadow sm:rounded-lg">

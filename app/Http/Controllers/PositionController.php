@@ -53,9 +53,9 @@ class PositionController extends Controller
         return redirect(route('positions.index'));
     }
 
-    public function delete(Position $position)
+    public function destroy(Position $position)
     {
         $position->delete();
-        return redirect(route('positions.index'));
+        return redirect()->back();
     }
 }
