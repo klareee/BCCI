@@ -70,7 +70,7 @@ class BiMonthlyPayroll implements ShouldQueue
                 "overall_total" => $overAllTotal,
             ]);
 
-            Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your payslip for {$payslip->start_date} - {$payslip->end_date} has been generated and is now available. Please check your email or the employee portal to view it. If you have any questions, feel free to reach out. Thank you!");
+            Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your payslip for {$payslip->start_date} - {$payslip->end_date} has been generated and is now available. Please check the employee portal to view it. If you have any questions, feel free to reach out. Thank you!");
         });
     }
 }
