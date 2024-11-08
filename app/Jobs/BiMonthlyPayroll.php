@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Classes\PaySlipCalculator;
+use App\Classes\Semaphore;
 use App\Enums\PayModeEnum;
 use App\Models\Payslip;
 use App\Models\User;
@@ -60,7 +61,7 @@ class BiMonthlyPayroll implements ShouldQueue
             $totalDeductions = $employee->deductions->sum('amount') / 2;
             $overAllTotal = $totalEarn - $totalDeductions;
 
-            Payslip::create([
+            $payslip = Payslip::create([
                 "user_id" => $employee->id,
                 "start_date" => $startOfMonth,
                 "end_date" => $endOfMonth,
@@ -68,6 +69,8 @@ class BiMonthlyPayroll implements ShouldQueue
                 "total_deductions" => $totalDeductions,
                 "overall_total" => $overAllTotal,
             ]);
+
+            Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your payslip for {$payslip->start_date} - {$payslip->end_date} has been generated and is now available. Please check your email or the employee portal to view it. If you have any questions, feel free to reach out. Thank you!");
         });
     }
 }

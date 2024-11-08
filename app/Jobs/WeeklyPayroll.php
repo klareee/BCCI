@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Classes\PaySlipCalculator;
+use App\Classes\Semaphore;
 use App\Enums\PayModeEnum;
 use App\Models\Payslip;
 use App\Models\User;
@@ -52,7 +53,7 @@ class WeeklyPayroll implements ShouldQueue
             $totalDeductions = $employee->deductions->sum('amount') / PaySlipCalculator::getWeeksByMonth();
             $overAllTotal = $totalEarn - $totalDeductions;
 
-            Payslip::create([
+            $payslip = Payslip::create([
                 "user_id" => $employee->id,
                 "start_date" => now()->startOfWeek(),
                 "end_date" => now()->endOfWeek(),
@@ -60,6 +61,8 @@ class WeeklyPayroll implements ShouldQueue
                 "total_deductions" => $totalDeductions,
                 "overall_total" => $overAllTotal,
             ]);
+
+            Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your payslip for {$payslip->start_date} - {$payslip->end_date} has been generated and is now available. Please check your email or the employee portal to view it. If you have any questions, feel free to reach out. Thank you!");
         });
     }
 }

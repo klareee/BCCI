@@ -36,7 +36,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file: .env
     volumes:
       - .:/var/www/html
     ports:
