@@ -47,22 +47,22 @@ RUN if [ -d "/var/www/html/storage" ]; then chown -R www-data:www-data /var/www/
     if [ -d "/var/www/html/bootstrap/cache" ]; then chown -R www-data:www-data /var/www/html/bootstrap/cache; fi
 
 # Create and Set Permissions for devuser
-# RUN useradd -G www-data,root -u 100 -d /home/devuser devuser && \
-#     mkdir -p /home/devuser/.composer && \
-#     chown -R devuser:devuser /home/devuser /var/www/html
+RUN useradd -G www-data,root -u 100 -d /home/devuser devuser && \
+    mkdir -p /home/devuser/.composer && \
+    chown -R devuser:devuser /home/devuser /var/www/html
 
 # Enable Apache Modules
-RUN a2enmod rewrite headers ssl
+RUN a2enmod rewrite headers
 
 # SSL Configuration
-COPY certs/localhost.crt /etc/ssl/certs/
-COPY certs/localhost.key /etc/ssl/private/
-RUN sed -i 's|SSLCertificateFile.*|SSLCertificateFile /etc/ssl/certs/localhost.crt|g' /etc/apache2/sites-available/default-ssl.conf && \
-    sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /etc/ssl/private/localhost.key|g' /etc/apache2/sites-available/default-ssl.conf && \
-    a2ensite default-ssl
+# COPY certs/localhost.crt /etc/ssl/certs/
+# COPY certs/localhost.key /etc/ssl/private/
+# RUN sed -i 's|SSLCertificateFile.*|SSLCertificateFile /etc/ssl/certs/localhost.crt|g' /etc/apache2/sites-available/default-ssl.conf && \
+#     sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /etc/ssl/private/localhost.key|g' /etc/apache2/sites-available/default-ssl.conf && \
+#     a2ensite default-ssl
 
 # Add Self-Signed Certificate to Trusted Authorities
-RUN cp /etc/ssl/certs/localhost.crt /usr/local/share/ca-certificates/localhost.crt && \
-    update-ca-certificates
+# RUN cp /etc/ssl/certs/localhost.crt /usr/local/share/ca-certificates/localhost.crt && \
+#     update-ca-certificates
 
 CMD [ "apachectl", "-D", "FOREGROUND" ]

@@ -158,9 +158,13 @@ class LeaveController extends Controller
 
             $clockIn = Carbon::createFromFormat('Y-m-d', $leave->date);
             $clockIn->hour = (int) config('app.clock_in');
+            $clockIn->minute = (int) 0;
+            $clockIn->second = (int) 0;
 
             $clockOut = Carbon::createFromFormat('Y-m-d', $leave->date);
             $clockOut->hour = (int) config('app.clock_out');
+            $clockOut->minute = (int) 0;
+            $clockOut->second = (int) 0;
 
             Entry::create([
                 'user_id'  => $leave->created_by,
