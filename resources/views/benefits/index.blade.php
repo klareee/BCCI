@@ -27,7 +27,7 @@
                                 {{ $benefit->name }}
                             </td>
                             <td class="px-4 py-3 text-sm">
-                                {{ $benefit->updater->full_name }}
+                                {{ $benefit->updater?->full_name }}
                             </td>
                             <td class="px-4 py-3 text-sm flex justify-end gap-2">
                                 <a href="{{ route('benefits.edit', ['benefit' => $benefit->id]) }}" class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border border-transparent rounded-lg active:bg-gray-100 hover:bg-gray-200 focus:outline-none focus:shadow-outline-gray">
