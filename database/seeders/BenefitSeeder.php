@@ -21,7 +21,8 @@ class BenefitSeeder extends Seeder
         ];
 
         foreach($benefits as $benefit) {
-            Benefit::create(['name' => $benefit]);
+            Benefit::create(['name' => $benefit, 'created_by' => 1,
+                        'updated_by' => 1]);
         }
     }
 }

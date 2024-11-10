@@ -17,7 +17,9 @@ class RoleSeeder extends Seeder
         foreach(RoleEnum::cases() as $role)
         {
             Role::factory()->create([
-                'name' => $role
+                'name' => $role,
+                'created_by' => 1,
+                        'updated_by' => 1
             ]);
         }
     }

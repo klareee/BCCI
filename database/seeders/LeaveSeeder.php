@@ -23,8 +23,10 @@ class LeaveSeeder extends Seeder
         ];
 
         foreach($leaves as $leave) {
-            LeaveType::create(['name' => $leave, 'is_paid' => true]);
-            LeaveType::create(['name' => $leave, 'is_paid' => false]);
+            LeaveType::create(['name' => $leave, 'is_paid' => true, 'created_by' => 1,
+                        'updated_by' => 1]);
+            LeaveType::create(['name' => $leave, 'is_paid' => false, 'created_by' => 1,
+                        'updated_by' => 1]);
         }
     }
 }
