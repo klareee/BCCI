@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Benefit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class DeductionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(),
+            'benefit_id' => Benefit::inRandomOrder()->first()?->id,
+            'amount' => rand(100, 1000)
         ];
     }
 }

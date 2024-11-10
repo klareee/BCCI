@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 
 class Entry extends Model
@@ -98,6 +99,11 @@ class Entry extends Model
                 return $hoursWorked;
             }
         );
+    }
+
+    public function overtime(): HasOne
+    {
+        return $this->hasOne(Overtime::class, 'entry_id');
     }
 
     public function user(): BelongsTo

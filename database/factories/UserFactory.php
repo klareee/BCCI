@@ -38,7 +38,7 @@ class UserFactory extends Factory
             'gender' => Arr::random([GenderEnum::MALE, GenderEnum::FEMALE]),
             'address' => fake()->address(),
             'marital_status' => Arr::random([CivilStatusEnum::SINGLE, CivilStatusEnum::MARRIED]),
-            'contact_number' => fake()->phoneNumber(),
+            'contact_number' => '09631853664',
         ];
     }
 

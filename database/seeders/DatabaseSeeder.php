@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\EmploymentStatusEnum;
 use App\Models\Category;
 use App\Models\EmploymentDetail;
+use App\Models\LeaveType;
 use App\Models\Position;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,7 +19,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class
+            RoleSeeder::class,
+            BenefitSeeder::class,
+            LeaveSeeder::class,
         ]);
 
 
@@ -35,5 +38,7 @@ class DatabaseSeeder extends Seeder
             'date_hired' => now(),
             'date_regularized' => now()
         ]);
+
+        $this->call(EmployeeSeeder::class);
     }
 }

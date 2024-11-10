@@ -65,6 +65,11 @@ class Overtime extends Model
         );
     }
 
+    public function entry(): BelongsTo
+    {
+        return $this->belongsTo(Entry::class, 'entry_id');
+    }
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
