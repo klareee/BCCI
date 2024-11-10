@@ -18,8 +18,6 @@ class RoleSeeder extends Seeder
         {
             Role::factory()->create([
                 'name' => $role,
-                'created_by' => 1,
-                        'updated_by' => 1
             ]);
         }
     }
