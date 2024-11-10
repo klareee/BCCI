@@ -31,6 +31,8 @@ class OvertimeFactory extends Factory
             'status' => StatusEnum::APPROVED,
             'is_sp_approved' => true,
             'is_mng_approved' => true,
+            'created_by' => 1,
+            'updated_by' => 1
         ];
     }
 }

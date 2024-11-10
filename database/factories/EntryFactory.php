@@ -24,6 +24,8 @@ class EntryFactory extends Factory
             'user_id' => User::factory(),
             'clock_in' => now()->setHour((int) config('app.clock_in'))->setMinute(0)->setSecond(0),
             'clock_out' => now()->setHour((int) config(key: 'app.clock_out'))->setMinute(0)->setSecond(0),
+            'created_by' => 1,
+            'updated_by' => 1
         ];
     }
 
@@ -37,6 +39,8 @@ class EntryFactory extends Factory
                 'entry_id' => $entry->id,
                 'time_start' => Carbon::parse($entry->clock_out)->subMinutes($minutes),
                 'time_end' => Carbon::parse($entry->clock_out)->addMinutes($minutes),
+                'created_by' => 1,
+                'updated_by' => 1
             ];
         }), 'overtime');
 

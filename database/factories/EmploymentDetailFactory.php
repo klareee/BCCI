@@ -27,7 +27,9 @@ class EmploymentDetailFactory extends Factory
             'supervisor_id' => User::inRandomOrder()->first()?->id,
             'employment_status' => EmploymentStatusEnum::REGULAR,
             'date_hired' => now(),
-            'date_regularized' =>  now()
+            'date_regularized' =>  now(),
+            'created_by' => 1,
+            'updated_by' => 1
         ];
     }
 }

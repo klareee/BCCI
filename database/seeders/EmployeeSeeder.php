@@ -42,6 +42,8 @@ class EmployeeSeeder extends Seeder
                         'entry_id' => $entry->id,
                         'time_start' => Carbon::parse($entry->clock_out)->subMinutes(120),
                         'time_end' => Carbon::parse($entry->clock_out)->addMinutes(120),
+                        'created_by' => $entry->user->id,
+                        'updated_by' => $entry->user->id
                     ];
                 }), 'overtime'), 'entries')
             ->create(['role_id' => Role::where('name', RoleEnum::EMPLOYEE->value)->first()?->id]);
