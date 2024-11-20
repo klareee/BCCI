@@ -21,4 +21,9 @@ class EmployeeLeaveInformation extends Model
     {
         return $this->belongsTo(LeaveType::class, 'leave_type_id');
     }
+
+    public function prettyCredit()
+    {
+        return $this->is_paid ? 'Paid' : 'Not Paid';
+    }
 }

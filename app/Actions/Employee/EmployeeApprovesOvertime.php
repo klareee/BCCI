@@ -2,6 +2,7 @@
 
 namespace App\Actions\Employee;
 
+use App\Enums\RoleEnum;
 use App\Enums\StatusEnum;
 use App\Models\{Overtime, User};
 
@@ -20,6 +21,11 @@ class EmployeeApprovesOvertime
 
         $supervisor = $overtime->employee->employmentDetail?->supervisor;
         $manager    = $overtime->employee->employmentDetail?->manager;
+
+        if($causer->role->name == RoleEnum::ADMIN->value) {
+            $overtime->is_sp_approved = true;
+            $overtime->is_mng_approved = true;
+        }
 
         if ($supervisor && $supervisor->id === $causer->id) {
             $overtime->is_sp_approved = true;

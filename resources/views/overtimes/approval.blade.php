@@ -58,7 +58,13 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-sm h-full flex justify-end gap-2">
-                                    @if (($overtime->employee->employmentDetail->supervisor_id === auth()->id() && $overtime->is_sp_approved === null) || ($overtime->employee->employmentDetail->manager_id === auth()->id() && $overtime->is_mng_approved === null))
+                                    @if (
+                                        !in_array($overtime->status, [
+                                            App\Enums\StatusEnum::APPROVED,
+                                            App\Enums\StatusEnum::CANCELLED,
+                                            App\Enums\StatusEnum::REJECTED,
+                                        ]) &&
+                                        (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value || ($overtime->employee->employmentDetail->supervisor_id === auth()->id() && $overtime->is_sp_approved === null) || ($overtime->employee->employmentDetail->manager_id === auth()->id() && $overtime->is_mng_approved === null)))
                                         <form action="{{ route('overtimes.approved', compact('overtime')) }}" method="post" onsubmit="return confirm('Do you want to approved this overtime?')">
                                             @csrf
                                             <textarea id="approved-comment-{{$key}}" name="comment" class="hidden"></textarea>

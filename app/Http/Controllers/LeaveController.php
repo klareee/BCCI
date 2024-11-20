@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Classes\LeaveCalculatorHelper;
+use App\Classes\Semaphore;
+use App\Enums\RoleEnum;
 use App\Enums\StatusEnum;
 use App\Models\EmployeeLeaveInformation;
 use App\Models\Entry;
 use App\Models\Leave;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +47,16 @@ class LeaveController extends Controller
             'reason' => 'required'
         ]);
 
+        $leaveCredit = EmployeeLeaveInformation::where('leave_type_id',$request->leave_type)->where('user_id', auth()->id())->first();
+
+        if(!$leaveCredit) {
+            return back()->withErrors(['leave_type' => "Employee is not eligible for this leave type."])->withInput();
+        }
+
+        if($leaveCredit->balance < 1) {
+            return back()->withErrors(['leave_type' => "No remaining leave credits."])->withInput();
+        }
+
         Leave::create([
             'user_id' => auth()->id(),
             'leave_type_id' => $request->leave_type,
@@ -52,6 +65,14 @@ class LeaveController extends Controller
             'reason' => $request->reason,
             'total_credit' => $request->type
         ]);
+
+        $admin = User::whereHas('role', function ($query) {
+            $query->where('name', RoleEnum::ADMIN);
+        })->first();
+
+        $employee = auth()->user();
+
+        Semaphore::send($admin->contact_number, "Good day Administrator, {$employee->fullName} has filed a leave. Please check the employee portal to view it. Thank you!");
 
         return redirect(route('leaves.index'));
     }
@@ -103,6 +124,11 @@ class LeaveController extends Controller
             $data['is_sp_approval_status'] = StatusEnum::CANCELLED->value;
         }
 
+        if(auth()->user()->role->name == RoleEnum::ADMIN->value) {
+            $data['is_mgr_approval_status'] = StatusEnum::REJECTED->value;
+            $data['is_sp_approval_status'] = StatusEnum::REJECTED->value;
+        }
+
         if (auth()->id() == $leave->user->employmentDetail->manager_id) {
             $data['is_mgr_approval_status'] = StatusEnum::REJECTED->value;
         }
@@ -118,7 +144,11 @@ class LeaveController extends Controller
             $leave->update([
                 'status' => StatusEnum::REJECTED->value
             ]);
+
         }
+
+        $employee = User::find($leave->created_by);
+        Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your filed leave has been {$leave->status}. Please check the employee portal to view it. Thank you!");
 
         if (auth()->id() == $leave->created_by) {
             return redirect(route('leaves.index'));
@@ -130,6 +160,11 @@ class LeaveController extends Controller
     public function approveOperation(Leave $leave)
     {
         $data = [];
+
+        if(auth()->user()->role->name == RoleEnum::ADMIN->value) {
+            $data['is_mgr_approval_status'] = StatusEnum::APPROVED->value;
+            $data['is_sp_approval_status'] = StatusEnum::APPROVED->value;
+        }
 
         if (auth()->id() == $leave->user->employmentDetail->manager_id) {
             $data['is_mgr_approval_status'] = StatusEnum::APPROVED->value;
@@ -173,6 +208,15 @@ class LeaveController extends Controller
             ]);
         }
 
+        $employee = User::find($leave->created_by);
+        Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your filed leave has been {$leave->status}. Please check the employee portal to view it. Thank you!");
+
         return redirect()->back();
+    }
+
+    public function approval()
+    {
+        $leaves = Leave::with('user.employmentDetail')->where('status', StatusEnum::PENDING)->paginate(10);
+        return view('leaves.approval', compact('leaves'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Employee\{EmployeeApprovesOvertime, EmployeeCancelsOvertime, EmployeeFilesOvertime, EmployeeRejectsOvertime, EmployeeUpdatesOvertime};
+use App\Enums\StatusEnum;
 use App\Http\Requests\Overtime\{ApprovedRequest, RejectedRequest, StoreRequest, UpdateRequest};
 use App\Models\{Entry, Overtime};
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,7 @@ class OvertimeController extends Controller
                 $query->where('manager_id', Auth::id())
                     ->orWhere('supervisor_id', Auth::id());
             })
+            ->where('status', StatusEnum::PENDING)
             ->orderBy('time_start', 'desc')
             ->paginate(10);
 

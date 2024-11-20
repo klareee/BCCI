@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/deductions/{deduction}', [DeductionController::class, 'update'])->name('deductions.update');
     Route::delete('/deductions/{deduction}', [DeductionController::class, 'destroy'])->name('deductions.destroy');
 
+    Route::get('/leaves/approval', [LeaveController::class, 'approval'])->name('leaves.approval');
     Route::resource('leaves', LeaveController::class);
     Route::get('/leaves/{leave}/cancel', [LeaveController::class, 'cancelPage'])->name('leaves.cancel-page');
     Route::patch('/leaves/{leave}/cancel', [LeaveController::class, 'cancelOperation'])->name('leaves.cancel-operation');

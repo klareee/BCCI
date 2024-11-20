@@ -30,7 +30,7 @@
                     @foreach ($leaveCredits as $leaveCredit)
                         <option value="{{ $leaveCredit->leaveType->id }}"
                             @if ($leaveCredit->leaveType->id == old('leave_type')) selected @endif>
-                            {{ Str::title($leaveCredit->leaveType->name) }}
+                            {{ Str::title($leaveCredit->leaveType->name) }} ({{ Str::title($leaveCredit->prettyCredit()) }}) - {{ $leaveCredit->balance }}
                         </option>
                     @endforeach
                 </select>
