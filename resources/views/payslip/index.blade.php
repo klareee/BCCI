@@ -23,13 +23,13 @@
                                     {{ $payslip->dateRange }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    ₱{{ number_format((float) $payslip->total_earn, 2, '.', '') }}
+                                    ₱{{ number_format((float) $payslip->total_earn, 2, '.', ',') }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    ₱{{ number_format((float) $payslip->total_deductions, 2, '.', '') }}
+                                    ₱{{ number_format((float) $payslip->total_deductions, 2, '.', ',') }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    ₱{{ number_format((float) $payslip->overall_total, 2, '.', '') }}
+                                    ₱{{ number_format((float) $payslip->overall_total, 2, '.', ',') }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $payslip->created_at->format('M d, Y') }}
