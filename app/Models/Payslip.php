@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,8 +23,11 @@ class Payslip extends Model
 
     public function dateRange(): Attribute
     {
+        $startDate = Carbon::parse($this->start_date)->format('M d, Y');
+        $endDate = Carbon::parse($this->end_date)->format('M d, Y');
+
         return Attribute::make(
-            get: fn() => "{$this->start_date} - {$this->end_date}"
+            get: fn() => "{$startDate} - {$endDate}"
         );
     }
 }
