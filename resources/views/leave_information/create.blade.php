@@ -24,7 +24,7 @@
                     <option value="" selected>Select one</option>
                     @foreach ($leaveTypes as $leaveType)
                         <option value="{{ $leaveType->id }}" @if ($leaveType->id == old('leave_type')) selected @endif>
-                            {{ $leaveType->name }}</option>
+                            {{ $leaveType->name }} ({{ $leaveType->prettyIsPaid() }})</option>
                     @endforeach
                 </select>
                 <x-input-error class="mt-2" :messages="$errors->get('leave_type')" />

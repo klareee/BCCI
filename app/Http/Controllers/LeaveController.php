@@ -159,6 +159,18 @@ class LeaveController extends Controller
 
     public function approveOperation(Leave $leave)
     {
+        $this->processLeaveApproval($leave);
+
+        return redirect()->back();
+    }
+
+    public function approval()
+    {
+        $leaves = Leave::with('user.employmentDetail')->where('status', StatusEnum::PENDING)->paginate(10);
+        return view('leaves.approval', compact('leaves'));
+    }
+
+    private function processLeaveApproval(Leave $leave) {
         $data = [];
 
         if(auth()->user()->role->name == RoleEnum::ADMIN->value) {
@@ -210,13 +222,20 @@ class LeaveController extends Controller
 
         $employee = User::find($leave->created_by);
         Semaphore::send($employee->contact_number, "Hello {$employee->fullName}, your filed leave has been {$leave->status}. Please check the employee portal to view it. Thank you!");
-
-        return redirect()->back();
     }
 
-    public function approval()
+    public function bulkApprove(Request $request)
     {
-        $leaves = Leave::with('user.employmentDetail')->where('status', StatusEnum::PENDING)->paginate(10);
-        return view('leaves.approval', compact('leaves'));
+        if(!$request->has('leaves')) return back();
+
+        foreach($request->leaves as $leaveId) {
+            $leave = Leave::find($leaveId);
+
+            if(!$leave) continue;
+
+            $this->processLeaveApproval($leave);
+        }
+
+        return redirect()->back();
     }
 }

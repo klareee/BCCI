@@ -57,6 +57,6 @@ document.addEventListener('alpine:init', () => {
              document.getElementById('time-in-text').textContent = `Time In: ${entry.clock_in}`;
              document.getElementById('time-out-text').textContent = `Time Out: ${entry.clock_out}`;
             }
-        }
+        },
     }))
 })

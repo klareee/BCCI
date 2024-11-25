@@ -4,12 +4,21 @@
     </x-slot>
 
     <div class="p-4 bg-white rounded-lg shadow-xs flex flex-col gap-3">
+        <div class="flex gap-2 justify-end">
+            <form id="approve-all-form" action="{{ route('leaves.bulkApprove') }}" method="post"> @csrf
+                <button
+                    class="px-4 py-2 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:ring"
+                    type="button" onclick="submitApproveAllForm()">Bulk Approve</button>
+            </form>
+        </div>
         <div class="overflow-hidden mb-8 w-full rounded-lg border shadow-xs">
+
             <div class="overflow-x-auto w-full">
                 <table class="w-full whitespace-no-wrap">
                     <thead>
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase bg-gray-50 border-b">
+                            <th class="px-4 py-3"><input type="checkbox" name="leave-checkbox" id="leave-checkbox"></th>
                             <th class="px-4 py-3">Date</th>
                             <th class="px-4 py-3">Credit Deduction</th>
                             <th class="px-4 py-3">Requestor</th>
@@ -23,6 +32,9 @@
                     <tbody class="bg-white divide-y">
                         @forelse($leaves as $leave)
                             <tr class="text-gray-700">
+                                <td class="px-4 py-3 text-sm">
+                                    <input type="checkbox" name="leaves[]" id="leaves" class="leaves" value="{{ $leave->id }}">
+                                </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $leave->date }}
                                 </td>
@@ -54,8 +66,9 @@
                                             App\Enums\StatusEnum::CANCELLED->value,
                                             App\Enums\StatusEnum::REJECTED->value,
                                         ]) &&
-                                            (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value || ((auth()->id() == $leave->user->employmentDetail->manager_id && $leave->is_mgr_approval_status) ||
-                                                (auth()->id() == $leave->user->employmentDetail->supervisor_id && $leave->is_sp_approval_status))))
+                                            (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value ||
+                                                ((auth()->id() == $leave->user->employmentDetail->manager_id && $leave->is_mgr_approval_status) ||
+                                                    (auth()->id() == $leave->user->employmentDetail->supervisor_id && $leave->is_sp_approval_status))))
                                         <form action="{{ route('leaves.approve-operation', ['leave' => $leave]) }}"
                                             method="post">
                                             @csrf
@@ -93,4 +106,25 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById('leave-checkbox').addEventListener('change', function() {
+            let checkboxes = document.querySelectorAll('.leaves');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        function submitApproveAllForm() {
+            let form = document.getElementById('approve-all-form');
+            let checkboxes = document.querySelectorAll('.leaves:checked');
+            checkboxes.forEach(checkbox => {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'leaves[]';
+                input.value = checkbox.value;
+                form.appendChild(input);
+            });
+            form.submit();
+        }
+    </script>
 </x-app-layout>

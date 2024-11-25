@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/deductions/{deduction}', [DeductionController::class, 'destroy'])->name('deductions.destroy');
 
     Route::get('/leaves/approval', [LeaveController::class, 'approval'])->name('leaves.approval');
+    Route::post('/leaves-bulk/approve', [LeaveController::class, 'bulkApprove'])->name('leaves.bulkApprove');
     Route::resource('leaves', LeaveController::class);
     Route::get('/leaves/{leave}/cancel', [LeaveController::class, 'cancelPage'])->name('leaves.cancel-page');
     Route::patch('/leaves/{leave}/cancel', [LeaveController::class, 'cancelOperation'])->name('leaves.cancel-operation');
