@@ -42,29 +42,46 @@ class LeaveController extends Controller
     {
         $request->validate([
             'leave_type' => 'required',
-            'date' => 'required|date|after_or_equal:now',
+            'date_from' => 'required|date|lte:date_to',
+            'date_to' => 'required|date|gte:date_from',
             'type' => 'required',
             'reason' => 'required'
         ]);
 
-        $leaveCredit = EmployeeLeaveInformation::where('leave_type_id',$request->leave_type)->where('user_id', auth()->id())->first();
+        $leaveCredit = EmployeeLeaveInformation::where('leave_type_id', $request->leave_type)->where('user_id', auth()->id())->first();
 
-        if(!$leaveCredit) {
+        if (!$leaveCredit) {
             return back()->withErrors(['leave_type' => "Employee is not eligible for this leave type."])->withInput();
         }
 
-        if($leaveCredit->balance < 1) {
+        if ($leaveCredit->balance < 1) {
             return back()->withErrors(['leave_type' => "No remaining leave credits."])->withInput();
         }
 
-        Leave::create([
-            'user_id' => auth()->id(),
-            'leave_type_id' => $request->leave_type,
-            'date' => $request->date,
-            'type' => $request->type,
-            'reason' => $request->reason,
-            'total_credit' => $request->type
-        ]);
+        // Initialize the starting date
+        $date_from = \Carbon\Carbon::parse($request->date_from);
+        $date_to = \Carbon\Carbon::parse($request->date_to);
+        $currentDate = $date_from;
+        // Loop through each date in the range
+
+        while ($currentDate->lte($date_to) && ($leaveCredit->balance >= 1)) {
+            Leave::create([
+                'user_id' => auth()->id(),
+                'leave_type_id' => $request->leave_type,
+                'date' => $currentDate->format('Y-m-d'),
+                'type' => $request->type,
+                'reason' => $request->reason,
+                'total_credit' => $request->type
+            ]);
+
+            // Move to the next date
+            $currentDate->addDay();
+            $leaveCredit->update([
+                'balance' => $leaveCredit->balance - 1
+            ]);
+
+            $leaveCredit->refresh();
+        }
 
         $admin = User::whereHas('role', function ($query) {
             $query->where('name', RoleEnum::ADMIN);
@@ -111,6 +128,7 @@ class LeaveController extends Controller
 
     public function cancelPage(Leave $leave)
     {
+        request()->session()->put('previous_url', url()->previous());
         return view('leaves.cancel', compact('leave'));
     }
 
@@ -124,7 +142,7 @@ class LeaveController extends Controller
             $data['is_sp_approval_status'] = StatusEnum::CANCELLED->value;
         }
 
-        if(auth()->user()->role->name == RoleEnum::ADMIN->value) {
+        if (auth()->user()->role->name == RoleEnum::ADMIN->value) {
             $data['is_mgr_approval_status'] = StatusEnum::REJECTED->value;
             $data['is_sp_approval_status'] = StatusEnum::REJECTED->value;
         }
@@ -144,7 +162,6 @@ class LeaveController extends Controller
             $leave->update([
                 'status' => StatusEnum::REJECTED->value
             ]);
-
         }
 
         $employee = User::find($leave->created_by);
@@ -153,6 +170,9 @@ class LeaveController extends Controller
         if (auth()->id() == $leave->created_by) {
             return redirect(route('leaves.index'));
         }
+
+        $previousUrl = $request->session()->get('previous_url');
+        if ($previousUrl) return redirect($previousUrl);
 
         return redirect(route('employees.leaves', ['employee_id' => $leave->created_by]));
     }
@@ -170,10 +190,11 @@ class LeaveController extends Controller
         return view('leaves.approval', compact('leaves'));
     }
 
-    private function processLeaveApproval(Leave $leave) {
+    private function processLeaveApproval(Leave $leave)
+    {
         $data = [];
 
-        if(auth()->user()->role->name == RoleEnum::ADMIN->value) {
+        if (auth()->user()->role->name == RoleEnum::ADMIN->value) {
             $data['is_mgr_approval_status'] = StatusEnum::APPROVED->value;
             $data['is_sp_approval_status'] = StatusEnum::APPROVED->value;
         }
@@ -226,12 +247,12 @@ class LeaveController extends Controller
 
     public function bulkApprove(Request $request)
     {
-        if(!$request->has('leaves')) return back();
+        if (!$request->has('leaves')) return back();
 
-        foreach($request->leaves as $leaveId) {
+        foreach ($request->leaves as $leaveId) {
             $leave = Leave::find($leaveId);
 
-            if(!$leave) continue;
+            if (!$leave) continue;
 
             $this->processLeaveApproval($leave);
         }

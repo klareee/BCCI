@@ -39,12 +39,22 @@
 
             <div class="max-w-xl mb-4">
                 <div class="flex gap-1">
-                    <x-input-label for="date" :value="__('Date')" />
+                    <x-input-label for="date_from" :value="__('Date From')" />
                     <span class="text-red-500">*</span>
                 </div>
-                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" :value="old('date')"
+                <x-text-input id="date_from" name="date_from" type="date" class="mt-1 block w-full" :value="old('date_from')"
                     autofocus autocomplete="date" />
-                <x-input-error class="mt-2" :messages="$errors->get('date')" />
+                <x-input-error class="mt-2" :messages="$errors->get('date_from')" />
+            </div>
+
+            <div class="max-w-xl mb-4">
+                <div class="flex gap-1">
+                    <x-input-label for="date_to" :value="__('Date To')" />
+                    <span class="text-red-500">*</span>
+                </div>
+                <x-text-input id="date_to" name="date_to" type="date" class="mt-1 block w-full" :value="old('date_to')"
+                    autofocus autocomplete="date" />
+                <x-input-error class="mt-2" :messages="$errors->get('date_to')" />
             </div>
 
             <div class="max-w-xl mb-4">

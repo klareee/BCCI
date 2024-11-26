@@ -5,15 +5,15 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
-Route::get('/', function () {
-    return view('time_record.index');
-})->middleware('guest');
+// Route::get('/', function () {
+//     return view('time_record.index');
+// })->middleware('guest');
 
 
 WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::view('about', 'about')->name('about');
 
