@@ -46,7 +46,8 @@ class EmployeeController extends Controller
                 'date_of_birth',
                 'contact_number',
                 'address',
-                'email'
+                'email',
+                'can_approve'
             ]),
             'role_id' => Role::where('name', RoleEnum::EMPLOYEE)->first()?->id,
             'password' => bcrypt('bcci_1234')

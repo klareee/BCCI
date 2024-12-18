@@ -89,12 +89,26 @@
         <x-input-error class="mt-2" :messages="$errors->get('email')" />
     </div>
 
-    <div class="w-full">
+    <div class="max-w-xl mb-4">
         <div class="flex gap-1">
             <x-input-label for="address" :value="__('Address')" />
             <span class="text-red-500">*</span>
         </div>
         <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address')"  autofocus autocomplete="address" />
         <x-input-error class="mt-2" :messages="$errors->get('address')" />
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-3 mb-4">
+        <div class="flex-4">
+            <div class="flex gap-1">
+                <x-input-label for="can_approve" :value="__('Can Approve')" />
+                <span class="text-red-500">*</span><small>(This user can allow to approve leaves and overtime)</small>
+            </div>
+            <select name="can_approve" id="can_approve" class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                <option value="1">Yes</option>
+                <option value="0" selected>No</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('can_approve')" />
+        </div>
     </div>
 </div>

@@ -63,7 +63,7 @@
             @endif
 
 
-            @if (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value)
+            @if (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value || auth()->user()->can_approve)
                 <li class="relative px-6 py-3">
                     <x-nav-link href="{{ route('leaves.approval') }}" :active="request()->routeIs('leaves.approval')">
                         <x-slot name="icon">

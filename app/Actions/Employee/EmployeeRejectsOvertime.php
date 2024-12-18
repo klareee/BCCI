@@ -21,7 +21,7 @@ class EmployeeRejectsOvertime
         $supervisor = $overtime->employee->employmentDetail?->supervisor;
         $manager    = $overtime->employee->employmentDetail?->manager;
 
-        if ($supervisor && $supervisor->id === $causer->id) {
+        if ($supervisor && $supervisor->id === $causer->id || $causer->can_approve) {
             $overtime->is_sp_approved = false;
         }
 

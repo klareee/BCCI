@@ -142,7 +142,7 @@ class LeaveController extends Controller
             $data['is_sp_approval_status'] = StatusEnum::CANCELLED->value;
         }
 
-        if (auth()->user()->role->name == RoleEnum::ADMIN->value) {
+        if (auth()->user()->role->name == RoleEnum::ADMIN->value || auth()->user()->can_approve) {
             $data['is_mgr_approval_status'] = StatusEnum::REJECTED->value;
             $data['is_sp_approval_status'] = StatusEnum::REJECTED->value;
         }
@@ -194,7 +194,7 @@ class LeaveController extends Controller
     {
         $data = [];
 
-        if (auth()->user()->role->name == RoleEnum::ADMIN->value) {
+        if (auth()->user()->role->name == RoleEnum::ADMIN->value || auth()->user()->can_approve) {
             $data['is_mgr_approval_status'] = StatusEnum::APPROVED->value;
             $data['is_sp_approval_status'] = StatusEnum::APPROVED->value;
         }

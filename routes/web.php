@@ -5,15 +5,15 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Laragear\WebAuthn\Http\Routes as WebAuthnRoutes;
 
-// Route::get('/', function () {
-//     return view('time_record.index');
-// })->middleware('guest');
+Route::get('/', function () {
+    return view('time_record.index');
+})->middleware('guest');
 
 
 WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::view('about', 'about')->name('about');
 
@@ -73,7 +73,12 @@ Route::middleware('auth')->group(function () {
         Route::get('check-user-record', [EntryController::class, 'checkHasRecord'])->name('entries.check-user-record');
         Route::post('clock-in/api', [EntryController::class, 'clockInApi'])->name('entries.clock-in-api');
         Route::post('clock-out/api', [EntryController::class, 'clockOutApi'])->name('entries.clock-out-api');
+
+        # Fingerprint API
     });
 });
+
+Route::post('entries/biometric/login', [EntryController::class, 'biometricLogin'])->name('entries.biometric-login');
+
 
 require __DIR__ . '/auth.php';

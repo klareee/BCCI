@@ -22,7 +22,7 @@ class EmployeeApprovesOvertime
         $supervisor = $overtime->employee->employmentDetail?->supervisor;
         $manager    = $overtime->employee->employmentDetail?->manager;
 
-        if($causer->role->name == RoleEnum::ADMIN->value) {
+        if($causer->role->name == RoleEnum::ADMIN->value || $causer->can_approve) {
             $overtime->is_sp_approved = true;
             $overtime->is_mng_approved = true;
         }
