@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\User\{UserClocksIn, UserClocksOut};
 use App\Models\Entry;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -115,5 +116,31 @@ class EntryController extends Controller
         }
 
         return response()->json(['success' => true, 'entry' => ['clock_in' => $entry->clock_in->format('d-M-Y h:i a'), 'clock_out' => $entry->clock_out?->format('d-M-Y h:i a')]]);
+    }
+
+    public function biometricLogin(Request $request)
+    {
+        $user = User::where('employee_code', $request->employee_code)->first();
+
+        if(!$user) {
+            return response()->json(['success' => false, 'message' => 'Employee not found!']);
+        }
+
+        $entry = Entry::whereDate('clock_in', Carbon::today())
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $state = (isset($entry) && empty($entry?->clock_out)) ? 'clock out' : 'clock in';
+
+        if($state == 'clock out') {
+            $entry = (new UserClocksOut)->execute($user, ['clock_out' => Carbon::now()]);
+        } else {
+            $entry = (new UserClocksIn)->execute($user);
+        }
+
+        $entry->refresh();
+
+        return response()->json(['success' => true, 'entry' => ['name' => $user->fullName, 'clock_in' => $entry?->clock_in->format('d-M-Y h:i a'), 'clock_out' => $entry->clock_out?->format('d-M-Y h:i a')]]);
     }
 }

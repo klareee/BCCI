@@ -14,6 +14,7 @@ use App\Models\PayrollInformation;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -164,5 +165,18 @@ class EmployeeController extends Controller
         $benefits = Benefit::get();
 
         return view('deductions.update', compact('benefits', 'employee', 'deduction'));
+    }
+
+    public function biometricRegister(Request $request)
+    {
+        $user = User::where('employee_code', $request->employee_code)->first();
+
+        if(!$user) {
+            return response()->json(['success' => false, 'message' => 'Employee not found!']);
+        }
+
+        $user->update(['fingerprint' => $request->fingerprint]);
+
+        return response()->json(['success' => true]);
     }
 }

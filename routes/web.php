@@ -9,6 +9,8 @@ Route::get('/', function () {
     return view('time_record.index');
 })->middleware('guest');
 
+Route::post('entries/biometric/login', [EntryController::class, 'biometricLogin'])->name('entries.biometric-login');
+Route::post('employee/biometric/register', [EmployeeController::class, 'biometricRegister']);
 
 WebAuthnRoutes::register()->withoutMiddleware(VerifyCsrfToken::class);
 
@@ -77,8 +79,6 @@ Route::middleware('auth')->group(function () {
         # Fingerprint API
     });
 });
-
-Route::post('entries/biometric/login', [EntryController::class, 'biometricLogin'])->name('entries.biometric-login');
 
 
 require __DIR__ . '/auth.php';

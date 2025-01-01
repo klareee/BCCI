@@ -26,7 +26,7 @@ class EmployeeSeeder extends Seeder
     public function run(): void
     {
         User::factory(3)
-            ->sequence(fn(Sequence $sequence) => ['email' => 'user' . $sequence->index + 1 . '@example.com'])
+            ->sequence(fn(Sequence $sequence) => ['employee_code' => (1000 + ($sequence->index + 1)), 'email' => 'user' . $sequence->index + 1 . '@example.com'])
             ->has(EmploymentDetail::factory(), 'employmentDetail')
             ->has(PayrollInformation::factory(), 'payrollInformation')
             ->has(Deduction::factory(2), 'deductions')

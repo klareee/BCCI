@@ -33,16 +33,25 @@ document.addEventListener('alpine:init', () => {
         // Dashboard
         confirmAction: false,
 
-        async registerAuth(userEmail) {
-            if (Webpass.isUnsupported()) {
-                alert("Your browser doesn't support WebAuthn.")
-            }
+        async registerAuth(employeeCode = null) {
+            const modal = document.getElementById("tailwind-modal");
 
-            const { success } = await Webpass.attest({path: "/webauthn/register/options", body: {email: userEmail}}, "/webauthn/register")
-
-            if (success) {
-                window.alert('User fingerprint successfully registered!')
+            if (modal.classList.contains("hidden")) {
+                modal.classList.remove("hidden");
+                modal.classList.add("pointer-events-auto");
+            } else {
+                modal.classList.add("hidden");
+                modal.classList.remove("pointer-events-auto");
             }
+            // if (Webpass.isUnsupported()) {
+            //     alert("Your browser doesn't support WebAuthn.")
+            // }
+
+            // const { success } = await Webpass.attest({path: "/webauthn/register/options", body: {email: userEmail}}, "/webauthn/register")
+
+            // if (success) {
+            //     window.alert('User fingerprint successfully registered!')
+            // }
         },
 
         async verifyAuth() {

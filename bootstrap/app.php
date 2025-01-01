@@ -17,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'webauthn/register',
             'webauthn/register/options',
             'entries/clock-in/api',
-            'entries/clock-out/api'
+            'entries/clock-out/api',
+            'entries/biometric/login',
+            'employee/biometric/register'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -20,15 +20,20 @@
                     <p class="text-gray-600">Click to start fingerprint capture</p>
                 </div>
 
+                <div class="bg-white px-6 max-w-md mx-auto py-4 text-sm mb-4">
+                    <div class="flex gap-1">
+                        <x-input-label for="employee_code" :value="__('Employee ID Numer')" />
+                        <span class="text-red-500">*</span>
+                    </div>
+                    <x-text-input id="employee_code" name="employee_code" type="text" class="mt-1 block w-full" :value="old('date_from')"
+                        autofocus />
+                </div>
                 <div class="bg-white shadow-md rounded-lg px-6 max-w-md mx-auto border border-black py-4 text-sm">
-                    <h6 class="font-bold ">Time Logs</h6>
+                    <h6 class="font-bold ">Employee Information</h6>
+                    <p class="text-gray-600" id="employee-name"></p>
                     <p class="text-gray-600" id="time-in-text"></p>
                     <p class="text-gray-600" id="time-out-text"></p>
                 </div>
-
-                <x-primary-button type="button" class="block mt-4 w-full" id="capture-btn">
-                    Clock In / Clock Out
-                </x-primary-button>
 
             </div>
         </div>
