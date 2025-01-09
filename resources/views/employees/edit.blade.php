@@ -116,7 +116,7 @@
                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
                 </div>
 
-                <div class="w-full">
+                <div class="w-full mb-4">
                     <div class="flex gap-1">
                         <x-input-label for="address" :value="__('Address')" />
                         <span class="text-red-500">*</span>
@@ -124,6 +124,20 @@
                     <x-text-input id="address" name="address" type="text" class="mt-1 block w-full"
                         :value="$user->address" autofocus autocomplete="address" />
                     <x-input-error class="mt-2" :messages="$errors->get('address')" />
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-3 mb-4">
+                    <div class="flex-4">
+                        <div class="flex gap-1">
+                            <x-input-label for="can_approve" :value="__('Can Approve')" />
+                            <span class="text-red-500">*</span><small>(This user can allow to approve leaves and overtime)</small>
+                        </div>
+                        <select name="can_approve" id="can_approve" class="mt-1 block w-full py-2 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <option value="1" @if($user->can_approve) selected @endif>Yes</option>
+                            <option value="0" @if(!$user->can_approve) selected @endif>No</option>
+                        </select>
+                        <x-input-error class="mt-2" :messages="$errors->get('can_approve')" />
+                    </div>
                 </div>
             </div>
 
@@ -134,6 +148,17 @@
                         {{ __('Employment Details') }}
                     </h2>
                 </header>
+
+                <div class="max-w-xl mb-4">
+                    <div class="flex-1">
+                        <div class="flex gap-1">
+                            <x-input-label for="employee_code" :value="__('Employee ID Number')" />
+                            <span class="text-red-500">*</span>
+                        </div>
+                        <x-text-input id="employee_code" name="employee_code" type="text" class="mt-1 block w-full" :value="old('employee_code', $user->employee_code)"  autofocus autocomplete="name" />
+                        <x-input-error class="mt-2" :messages="$errors->get('employee_code')" />
+                    </div>
+                </div>
 
                 <div class="flex flex-col md:flex-row gap-3 mb-4">
                     <div class="flex-1">

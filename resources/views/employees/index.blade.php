@@ -27,6 +27,7 @@
                     <thead>
                         <tr
                             class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase bg-gray-50 border-b">
+                            <th class="px-4 py-3">Employee Code</th>
                             <th class="px-4 py-3">Name</th>
                             <th class="px-4 py-3">Email</th>
                             <th class="px-4 py-3">Role</th>
@@ -37,6 +38,9 @@
                     <tbody class="bg-white divide-y">
                         @forelse($employees as $employee)
                             <tr class="text-gray-700">
+                                <td class="px-4 py-3 text-sm">
+                                    {{ $employee->employee_code }}
+                                </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $employee->full_name }}
                                 </td>

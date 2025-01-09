@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
 use App\Http\Requests\EmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Benefit;
 use App\Models\Category;
 use App\Models\Deduction;
@@ -48,7 +49,8 @@ class EmployeeController extends Controller
                 'contact_number',
                 'address',
                 'email',
-                'can_approve'
+                'can_approve',
+                'employee_code'
             ]),
             'role_id' => Role::where('name', RoleEnum::EMPLOYEE)->first()?->id,
             'password' => bcrypt('bcci_1234')
@@ -93,7 +95,7 @@ class EmployeeController extends Controller
         return view('employees.edit', compact('user', 'positions', 'categories'));
     }
 
-    public function update(EmployeeRequest $request)
+    public function update(UpdateEmployeeRequest $request)
     {
         $user = User::findOrFail($request->employee);
 
@@ -106,6 +108,8 @@ class EmployeeController extends Controller
             'date_of_birth',
             'contact_number',
             'address',
+            'can_approve',
+            'employee_code'
         ]));
 
         $user->employmentDetail->update([

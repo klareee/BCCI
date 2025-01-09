@@ -5,6 +5,17 @@
         </h2>
     </header>
 
+    <div class="max-w-xl mb-4">
+        <div class="flex-1">
+            <div class="flex gap-1">
+                <x-input-label for="employee_code" :value="__('Employee ID Number')" />
+                <span class="text-red-500">*</span>
+            </div>
+            <x-text-input id="employee_code" name="employee_code" type="text" class="mt-1 block w-full" :value="old('employee_code')"  autofocus autocomplete="name" />
+            <x-input-error class="mt-2" :messages="$errors->get('employee_code')" />
+        </div>
+    </div>
+
     <div class="flex flex-col md:flex-row gap-3 mb-4">
         <div class="flex-1">
             <div class="flex gap-1">

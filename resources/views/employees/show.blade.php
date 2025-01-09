@@ -54,6 +54,9 @@
             <div class="flex flex-col gap-3">
 
                 <div class="flex gap-2">
+                    <span>Employee Code:</span><b>{{ $user->employee_code }}</b>
+                </div>
+                <div class="flex gap-2">
                     <span>Position:</span><b>{{ Str::title($user->employmentDetail?->position->name) }}</b>
                 </div>
 
