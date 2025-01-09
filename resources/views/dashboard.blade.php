@@ -4,7 +4,7 @@
     </x-slot>
 
     @if (auth()->user()->role->name == App\Enums\RoleEnum::ADMIN->value)
-        Sample
+        <h3>Welcome back Admin!</h3>
     @else
         @include('components.dtr-login')
     @endif
